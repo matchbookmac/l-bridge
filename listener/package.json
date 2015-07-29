@@ -1,0 +1,17 @@
+      
+{
+  "name" : "bridgeApp-listen",
+  "description" : "SNMP Listener Module for bridgeApp.",
+  "version" : "0.0.1",
+  "author" : "MIGs <mig@multco.us",
+  "dependencies" : {
+    "snmp": "0.1.8",
+    "bunyan":"1.4.0",
+    "util": "0.10.3"  
+  },
+  "repository" : {
+      "type": "git", 
+      "url": "https://multco.git.beanstalkapp.com/bridgeapp.git"},
+  "main" : "trapd.js"
+}
+  
