@@ -5,9 +5,9 @@
   "version" : "0.0.1",
   "author" : "MIGs <mig@multco.us",
   "dependencies" : {
-    "snmp": "0.1.8",
-    "bunyan":"1.4.0",
-    "util": "0.10.3"  
+    "snmpjs": "",
+    "bunyan":"1.x",
+    "util": "0.10.x"  
   },
   "repository" : {
       "type": "git", 
