@@ -23,7 +23,7 @@ var options = {
 };
 var timestamp = (new Date()).toLocaleTimeString();
 var daystamp = (new Date()).toString();
-//create new log files everytime.  Should be the same and not in the project structure
+//create new log files with timestamp
 //var streamraw = fs.createWriteStream('rec-raw-'+ timestamp+'.json',{ flags: 'w',
 //  encoding: "utf8",
 //  mode: 0666 });

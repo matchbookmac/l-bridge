@@ -3,7 +3,6 @@
 
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
-var snmp = require('snmp-native');
 
 // Listen for emission of the "message" event.
 server.on('message', function (message) {
