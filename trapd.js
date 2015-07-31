@@ -52,7 +52,7 @@ streamraw.write(pkg);
     //Bridge 5 Cuevas Crossing Test Bridge
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.5') > -1 && pkg.indexOf('value: 1') >1 ){
                      console.log('Cuevas Crossing is up!');      
-        bridge = 'cuevas';
+        bridge = 'Cuevas';
         updown = 'up';
         transmit(bridge, updown, daystamp, function(err, res){
         console.log(res);
@@ -62,50 +62,106 @@ streamraw.write(pkg);
     }
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.5') > -1 && pkg.indexOf('value: 0') >1 ){
                      console.log('Cuevas Crossing is down!');
-        bridge = 'cuevas';
+        bridge = 'Cuevas';
         updown = 'down';
         //send bridge and state off to transmitter
         transmit(bridge, updown, daystamp, function(err, res){
         console.log(res);
-        streamlog.write(daystamp + ':  Cuevas Crossing Down'+ res+' \n');
+        streamlog.write(daystamp + ':  Cuevas Crossing Down '+ res+' \n');
         });
         
     }
      //Bridge 4 Broadway
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.4') > -1 && pkg.indexOf('value: 1') >1 ){
                      console.log('Broadway Bridge is up!');
-        streamlog.write(new Date().toString() + ':  Broadway Bridge Up \n');
+               bridge = 'Broadway';
+        updown = 'up';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Broadway Up '+ res+' \n');
+        });
+        
     }
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.4') > -1 && pkg.indexOf('value: 0') >1 ){
                      console.log('Broadway Bridge is down!');
-        streamlog.write(new Date().toString() + ':  Broadway Bridge down \n');
+                bridge = 'Broadway';
+        updown = 'down';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Broadway Down '+ res+' \n');
+        });
+        
     }
      //Bridge 3 Burnside
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.3') > -1 && pkg.indexOf('value: 1') >1 ){
                      console.log('Burnside Bridge is up!');
-        streamlog.write(new Date().toString() + ':  Burnside Bridge Up \n');
+                bridge = 'Burnside';
+        updown = 'up';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Burnside Up '+ res+' \n');
+        });
+        
     }
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.3') > -1 && pkg.indexOf('value: 0') >1 ){
                      console.log('Burnside Bridge is down!');
-        streamlog.write(new Date().toString() + ':  Burnside Bridge down \n');
+                bridge = 'Burnside';
+        updown = 'down';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Burnside Down '+ res+' \n');
+        });
+        
     }
      //Bridge 2 Morrison
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.2') > -1 && pkg.indexOf('value: 1') >1 ){
                      console.log('Morrison Bridge is up!');
-        streamlog.write(new Date().toString() + ':  Morrison Bridge Up \n');
+                bridge = 'Morrison';
+        updown = 'up';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Morrison Up '+ res+' \n');
+        });
+        
     }
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.2') > -1 && pkg.indexOf('value: 0') >1 ){
                      console.log('Morrison Bridge is down!');
-        streamlog.write(new Date().toString() + ':  Morrison Bridge down \n');
+                bridge = 'Morrison';
+        updown = 'down';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Morrison Down '+ res+' \n');
+        });
+        
     }
      //Bridge 1 Hawthorne
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.1') > -1 && pkg.indexOf('value: 1') >1 ){
                      console.log('Hawthorne Bridge is up!');
-        streamlog.write(new Date().toString() + ':  Hawthorne Bridge Up \n');
+                bridge = 'Hawthorne';
+        updown = 'up';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Hawthorne Up '+ res+' \n');
+        });
+        
     }
     if (pkg.indexOf('1.3.6.1.4.1.20839.1.2.1.1.1.2.1') > -1 && pkg.indexOf('value: 0') >1 ){
                      console.log('Hawthorne Bridge is down!');
-        streamlog.write(new Date().toString() + ':  Hawthorne Bridge down \n');
+                bridge = 'Hawthorne';
+        updown = 'down';
+        //send bridge and state off to transmitter
+        transmit(bridge, updown, daystamp, function(err, res){
+        console.log(res);
+        streamlog.write(daystamp + ':  Hawthorne Down '+ res+' \n');
+        });
+        
     }
 });
  

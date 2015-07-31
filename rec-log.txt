@@ -1,0 +1,11 @@
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Starting up SNMP Listner 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Cuevas Crossing Up Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Cuevas Crossing Down Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Hawthorne Up Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Hawthorne Down Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Morrison Up Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Morrison Down Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Burnside Up Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Burnside Down Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Broadway Up Message Sent to a-bridge 
+Fri Jul 31 2015 16:39:48 GMT-0700 (PDT):  Broadway Down Message Sent to a-bridge 
