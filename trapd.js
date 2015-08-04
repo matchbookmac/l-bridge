@@ -22,7 +22,7 @@ var options = {
     family: 'udp4',
 };
 var timestamp = (new Date()).toLocaleTimeString();
-var daystamp = (new Date()).toString();
+
 //create new log files with timestamp
 //var streamraw = fs.createWriteStream('rec-raw-'+ timestamp+'.json',{ flags: 'w',
 //  encoding: "utf8",
@@ -46,6 +46,7 @@ var updown ='';
 
 
 trapd.on('trap',function(msg) {
+var daystamp = (new Date()).toString();
 var pkg = util.inspect(snmp.message.serializer(msg), false, null);
 streamraw.write(pkg);
     //Ugly code follows
