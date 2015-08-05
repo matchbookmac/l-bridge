@@ -16,7 +16,7 @@
     "bunyan": "^1.4.0",
     "fs": "0.0.2",
     "path": "^0.11.14",
-    "snmpjs": "file:../node-snmpjs",
+    "snmpjs": "file:./node-snmpjs",
     "util": "^0.10.3"
   }
 }
