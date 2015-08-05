@@ -1,0 +1,34 @@
+{"name":"snmpd",
+  "hostname":"it0342mac-l.co.multnomah.or.us",
+  "pid":4698,
+  "component":"snmp-agent",
+  "level":10,
+  "raw":{"buf":"<Buffer 30 50 02 01 00 04 06 70 75 62 6c 69 63 a4 43 06 09 2b 06 01 04 01 81 a2 67 02 40 04 ac 14 0f ec 02 01 06 02 01 01 43 02 47 06 30 26 30 14 06 0f 2b 06 ... >","len":82},
+  "origin":{"family":"udp4","address":"172.20.15.236","port":4000},
+  "snmpmsg":{
+    "version":"v1(0)",
+    "community":"public",
+    "pdu":{
+      "op":"Trap(4)",
+      "enterprise":"1.3.6.1.4.1.20839.2",
+      "agent_addr":"172.20.15.236",
+      "generic_trap":6,
+      "specific_trap":1,
+      "time_stamp":18182,
+      "varbinds":[
+        {"oid":"1.3.6.1.4.1.20839.1.2.1.1.1.2.5",
+          "typename":"Integer",
+          "value":0,
+          "string_value":"0"
+        },
+        {"oid":"1.3.6.1.2.1.1.3.0",
+          "typename":"TimeTicks",
+          "value":18182,
+          "string_value":"18182"
+        }
+      ]
+    }
+  },
+  "msg":"Received SNMP message",
+  "time":"2015-08-04T22:04:53.815Z","v":0
+}

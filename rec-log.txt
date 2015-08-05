@@ -1,5 +1,1 @@
-Tue Aug 04 2015 07:22:03 GMT-0700 (PDT):  Starting up SNMP Listner 
-Tue Aug 04 2015 07:22:27 GMT-0700 (PDT):  Cuevas Crossing Up Message Sent to a-bridge 
-Tue Aug 04 2015 07:22:49 GMT-0700 (PDT):  Cuevas Crossing Down Message Sent to a-bridge 
-Tue Aug 04 2015 07:26:18 GMT-0700 (PDT):  Cuevas Crossing Up Message Sent to a-bridge 
-Tue Aug 04 2015 07:26:32 GMT-0700 (PDT):  Cuevas Crossing Down Message Sent to a-bridge 
+Tue Aug 04 2015 16:30:39 GMT-0700 (PDT):  Starting up SNMP Listner 

@@ -1,0 +1,22 @@
+{
+  "name": "bridgeapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "trapd.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://multco.git.beanstalkapp.com/bridgeapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bunyan": "^1.4.0",
+    "fs": "0.0.2",
+    "path": "^0.11.14",
+    "snmpjs": "file:../node-snmpjs",
+    "util": "^0.10.3"
+  }
+}
