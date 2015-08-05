@@ -3,23 +3,10 @@ module .exports = function(bridgeData, callback){
   var snmp = require('snmpjs');
   var http = require('http');
 
-    // // Create POST request to external server
-    // var options = {
-    //   hostname: "192.168.1.182",
-    //   port: 3002,
-    //   path: "/incoming-snmp",
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     "Content-Length": postData.length
-    //   }
-    // };
-
-    // Create POST request to internal server
-  bridgeData = JSON.stringify(bridgeData);  
+  bridgeData = JSON.stringify(bridgeData);
 
   var options = {
-    hostname: "172.20.144.116",
+    hostname: "172.20.150.158",
     port: 3002,
     path: "/incoming-snmp",
     method: "POST",
