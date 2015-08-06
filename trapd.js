@@ -1,15 +1,15 @@
 var
-  snmp = require('snmpjs'),
-  bunyan = require('bunyan'),
-  fs = require("fs"),
-  path = require('path'),
-  os = require('os'),
+  snmp              = require('snmpjs'),
+  bunyan            = require('bunyan'),
+  fs                = require("fs"),
+  path              = require('path'),
+  os                = require('os'),
   postBridgeMessage = require('./postBridgeMessage.js')
 ;
 
 var
   netAddresses = os.networkInterfaces(),
-  options = {
+  options      = {
     // netAddresses gets local ip address
     addr: netAddresses.en1[1].address,
     port: 4000,
