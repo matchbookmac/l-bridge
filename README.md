@@ -11,10 +11,14 @@ npm install
 
 Start server:
 
+*Production:*
 ```console
-node trapd.js
+node index.js
 ```
-
+*Development:*
+```console
+nodemon index.js
+```
 <!--
   TODO
   When deploying on server, where do we want to store the code?
