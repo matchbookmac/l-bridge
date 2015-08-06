@@ -12,7 +12,7 @@ var
   options      = {
     // netAddresses gets local ip address
     addr: netAddresses.en1[1].address,
-    port: 4000,
+    port: 162,
     family: 'udp4'
   }
 ;
