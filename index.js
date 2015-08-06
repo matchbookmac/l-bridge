@@ -11,7 +11,7 @@ var
   netAddresses = os.networkInterfaces(),
   options      = {
     // netAddresses gets local ip address
-    addr: netAddresses.en1[1].address,
+    addr: netAddresses.en1[1].address || netAddresses.eth0[0].address,
     port: 162,
     family: 'udp4'
   }
