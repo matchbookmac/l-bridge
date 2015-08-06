@@ -2,9 +2,10 @@
   "name": "bridgeapp",
   "version": "1.0.0",
   "description": "",
-  "main": "trapd.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
   },
   "devDependencies": {
     "nodemon": "^1.4.0"
+  },
+  "engines": {
+    "node": "0.12.7"
   }
 }
