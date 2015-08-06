@@ -1,16 +1,23 @@
-var snmp = require('snmpjs');
-var bunyan = require('bunyan');
-var fs = require("fs");
-var path = require('path');
-var postBridgeMessage = require('./postBridgeMessage.js');
+var
+  snmp = require('snmpjs'),
+  bunyan = require('bunyan'),
+  fs = require("fs"),
+  path = require('path'),
+  os = require('os'),
+  postBridgeMessage = require('./postBridgeMessage.js')
+;
 
-var options = {
-    // addr: '172.20.198.217',
-    addr: '172.20.150.158',
+var
+  netAddresses = os.networkInterfaces(),
+  options = {
+    // netAddresses gets local ip address
+    addr: netAddresses.en1[1].address,
     port: 4000,
     family: 'udp4'
-};
-var timestamp = new Date().toLocaleTimeString();
+  }
+;
+
+// var timestamp = new Date().toLocaleTimeString();
 
 //create new log files with timestamp
 //var streamraw = fs.createWriteStream('rec-raw-'+ timestamp+'.json',{ flags: 'w',
