@@ -1,14 +1,18 @@
 var
   snmp              = require('snmpjs'),
   bunyan            = require('bunyan'),
+  wlog              = require('winston'),
   fs                = require("fs"),
   path              = require('path'),
-  postBridgeMessage = require('./postBridgeMessage.js'),
-  ipAddress         = require('./findAddress.js')()
+  os                = require('os'),
+  postBridgeMessage = require('./postBridgeMessage.js')
 ;
 
-var options = {
-    addr: ipAddress,
+var
+  netAddresses = os.networkInterfaces(),
+  options      = {
+    // netAddresses gets local ip address
+    addr: netAddresses.en0[1].address,
     port: 4000,
     family: 'udp4'
   }
@@ -29,8 +33,9 @@ var streamlog = fs.WriteStream('rec-log.txt',{ flags: 'w',
   encoding: "utf8",
   mode: 0666 });
 
-var log = new bunyan({ name: 'snmpd', level: 'trace'});
-var trapd = snmp.createTrapListener({log: log});
+// var log = new bunyan({ name: 'snmpd', level: 'trace'});
+wlog.add(wlog.transports.File, { filename: 'logs/winstonlog.log'});
+var trapd = snmp.createTrapListener();
 
 var oids = {
   //using oid's as keys for bridgenames
@@ -61,11 +66,13 @@ trapd.on('trap',function(msg) {
         timeStamp:timeStamp
       }
       postBridgeMessage(bridgeMessage, function(err, res){
-        console.log(res);
+        wlog.info(res.status.toString());
       });
       streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
+      wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
     } else {
-      console.log("Sentiel has started up");
+      console.log("Sentinel has started up");
+      wlog.info("Sentinel restart")
       var client = snmp.createClient({ log: log });
       for (var oid in oids.bridges) {
         if (oids.hasOwnProperty(oid)) {
@@ -77,7 +84,7 @@ trapd.on('trap',function(msg) {
               timeStamp:timeStamp
             }
             postBridgeMessage(bridgeMessage, function(err, res){
-              console.log(res);
+              wlog.info(res.status.toString());
             });
           });
         }
