@@ -1,1 +1,8 @@
 {"level":"info","message":"foo","timestamp":"2015-08-07T21:52:14.232Z"}
+{"level":"info","message":"cuevas status changed to false at Fri Aug 07 2015 16:21:39 GMT-0700 (PDT)","timestamp":"2015-08-07T23:21:39.248Z"}
+{"level":"info","message":"cuevas status changed to false at Fri Aug 07 2015 16:25:14 GMT-0700 (PDT)","timestamp":"2015-08-07T23:25:14.354Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:25:14.462Z"}
+{"level":"info","message":"cuevas status changed to true at Fri Aug 07 2015 16:25:30 GMT-0700 (PDT)","timestamp":"2015-08-07T23:25:30.144Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:25:30.200Z"}
+{"level":"info","message":"cuevas status changed to false at Fri Aug 07 2015 16:25:42 GMT-0700 (PDT)","timestamp":"2015-08-07T23:25:42.224Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:25:42.262Z"}

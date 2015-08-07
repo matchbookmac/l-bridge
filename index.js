@@ -5,7 +5,7 @@ var
   fs                = require("fs"),
   path              = require('path'),
   os                = require('os'),
-  ipAddress         = require('./findAddress.js')(),
+  ipAddress         = require('./findAddress.js'),
   postBridgeMessage = require('./postBridgeMessage.js')
 ;
 
@@ -13,8 +13,8 @@ var
   netAddresses = os.networkInterfaces(),
   options      = {
     // netAddresses gets local ip address
-    addr: ipAddress,
-    port: 4000,
+    addr: '172.20.198.7',
+    port: 162,
     family: 'udp4'
   }
 ;
@@ -26,9 +26,9 @@ var streamlog = fs.WriteStream('rec-log.txt',{ flags: 'w',
   encoding: "utf8",
   mode: 0666 });
 
-// var log = new bunyan({ name: 'snmpd', level: 'trace'});
+var log = new bunyan({ name: 'snmpd', level: 'trace'});
 wlog.add(wlog.transports.File, { filename: 'logs/winstonlog.log'});
-var trapd = snmp.createTrapListener();
+var trapd = snmp.createTrapListener({ log: log });
 
 var oids = {
   //using oid's as keys for bridgenames
@@ -54,7 +54,7 @@ trapd.on('trap',function(msg) {
   function parseBridge(trapData) {
     if (oids[trapData.oid] != "Sentinel 16 is up") {
       var bridgeMessage = {
-        bridge:oids[trapData.oid],
+        bridge:oids.bridges[trapData.oid],
         status:trapData.data.value == 1,
         timeStamp:timeStamp
       }
@@ -68,11 +68,11 @@ trapd.on('trap',function(msg) {
       wlog.info("Sentinel restart")
       var client = snmp.createClient({ log: log });
       for (var oid in oids.bridges) {
-        if (oids.hasOwnProperty(oid)) {
+        if (oids.bridges.hasOwnProperty(oid)) {
           client.get(agentAddress, community, 0, oid, function (snmpmsg) {
             var timeStamp = (new Date()).toString();
             var bridgeMessage = {
-              bridge:oids[snmpmsg.pdu.varbinds[0].oid],
+              bridge:oids.bridges[snmpmsg.pdu.varbinds[0].oid],
               status:snmpmsg.pdu.varbinds[0].data.value == 1,
               timeStamp:timeStamp
             }
