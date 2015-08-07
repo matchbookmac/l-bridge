@@ -5,6 +5,7 @@ var
   fs                = require("fs"),
   path              = require('path'),
   os                = require('os'),
+  ipAddress         = require('./findAddress.js'),
   postBridgeMessage = require('./postBridgeMessage.js')
 ;
 
@@ -12,19 +13,11 @@ var
   netAddresses = os.networkInterfaces(),
   options      = {
     // netAddresses gets local ip address
-    addr: netAddresses.en0[1].address,
+    addr: ipAddress,
     port: 4000,
     family: 'udp4'
   }
 ;
-
-function print_get_response(snmpmsg)
-{
-	snmpmsg.pdu.varbinds.forEach(function (varbind) {
-		console.log(varbind.oid + ' = ' + varbind.data.value);
-	});
-}
-
 
 var streamraw = fs.WriteStream('rec-raw.json',{ flags: 'w',
   encoding: "utf8",
