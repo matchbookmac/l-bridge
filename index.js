@@ -34,8 +34,9 @@ var streamlog = fs.WriteStream('rec-log.txt',{ flags: 'w',
 var log = new bunyan({ name: 'snmpd', level: 'trace'});
 var trapd = snmp.createTrapListener({log: log});
 
-var bridges = {
+var oids = {
   //using oid's as keys for bridgenames
+  "1.3.6.1.2.1.1.1.0":               "Sentinel 16 is up",
   "1.3.6.1.4.1.20839.1.2.1.1.1.2.5": "cuevas",
   "1.3.6.1.4.1.20839.1.2.1.1.1.2.4": "broadway",
   "1.3.6.1.4.1.20839.1.2.1.1.1.2.3": "burnside",
@@ -47,21 +48,24 @@ var bridges = {
 trapd.on('trap',function(msg) {
   var timeStamp = (new Date()).toString();
   var pkg = snmp.message.serializer(msg)
+  var trapData = pkg.pdu.varbinds[0];
 
-  var bridgeData = pkg.pdu.varbinds[0];
-
-  function parseBridge(bridgeData) {
+  function parseBridge(trapData) {
+    if (oids[trapData.oid] != "Sentinel 16 is up") {
       var bridgeMessage = {
-        bridge:bridges[bridgeData.oid],
-        status:bridgeData.value == 1,
+        bridge:oids[trapData.oid],
+        status:trapData.value == 1,
         timeStamp:timeStamp
       }
       postBridgeMessage(bridgeMessage, function(err, res){
         console.log(res);
       });
       streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString())
+    } else {
+      console.log("Sentiel has started up")
+    }
   };
-  parseBridge(bridgeData);
+  parseBridge(trapData);
 });
 
 trapd.bind(options);
