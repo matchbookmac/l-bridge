@@ -18,7 +18,9 @@
     "fs": "0.0.2",
     "path": "^0.11.14",
     "snmpjs": "file:./node-snmpjs",
-    "util": "^0.10.3"
+    "util": "^0.10.3",
+    "winston": "1.0.1"
+
   },
   "devDependencies": {
     "nodemon": "^1.4.0"
