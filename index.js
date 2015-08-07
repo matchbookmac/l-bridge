@@ -5,7 +5,7 @@ var
   fs                = require("fs"),
   path              = require('path'),
   os                = require('os'),
-  ipAddress         = require('./findAddress.js'),
+  ipAddress         = require('./findAddress.js')(),
   postBridgeMessage = require('./postBridgeMessage.js')
 ;
 
