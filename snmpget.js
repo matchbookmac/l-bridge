@@ -3,7 +3,7 @@
  * Copyright (c) 2015 Jan Van Buggenhout.  All rights reserved.
  */
 
-var snmp = require('./lib/index.js');
+var snmp = require('./node-snmpjs/lib/index.js');
 var bunyan = require('bunyan');
 var util = require('util');
 
@@ -21,9 +21,8 @@ function print_get_response(snmpmsg)
 var ip = process.argv[2];
 var community = process.argv[3];
 var oid = process.argv[4];
-var result;
+
 client.get(ip, community, 0, oid, function (snmpmsg) {
-	result = snmpmsg
-	console.log(snmpmsg);
-	// client.unref();
+	print_get_response(snmpmsg);
+	client.unref();
 });
