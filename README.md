@@ -6,15 +6,16 @@ if starting from scratch:
 sudo apt-get nodejs
 git clone https://multco.git.beanstalkapp.com/bridgeapp.git
 cd bridgeapp
-npm install
+npm install -g forever
 ```
 
 Start server:
 
 *Production:*
 ```console
-node index.js
+forever start index.js
 ```
+
 *Development:*
 ```console
 nodemon index.js
