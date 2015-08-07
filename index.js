@@ -3,16 +3,13 @@ var
   bunyan            = require('bunyan'),
   fs                = require("fs"),
   path              = require('path'),
-  os                = require('os'),
-  postBridgeMessage = require('./postBridgeMessage.js')
+  postBridgeMessage = require('./postBridgeMessage.js'),
+  ipAddress         = require('./findAddress.js')()
 ;
 
-var
-  netAddresses = os.networkInterfaces(),
-  options      = {
-    // netAddresses gets local ip address
-    addr: netAddresses.en1 ? netAddresses.en1[1].address : netAddresses.eth0[0].address,
-    port: 162,
+var options = {
+    addr: ipAddress,
+    port: 4000,
     family: 'udp4'
   }
 ;
@@ -62,6 +59,7 @@ trapd.on('trap',function(msg) {
       postBridgeMessage(bridgeMessage, function(err, res){
         console.log(res);
       });
+      streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString())
   };
   parseBridge(bridgeData);
 });

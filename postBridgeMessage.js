@@ -11,7 +11,9 @@ module .exports = function(bridgeData, callback){
   var
     netAddresses = os.networkInterfaces(),
     options = {
-      hostname: "immense-anchorage-9797.herokuapp.com",
+
+      // hostname: netAddresses.en0[1].address,
+      hostname: "52.26.186.75",
       port: 80,
       path: "/incoming-snmp",
       method: "POST",
