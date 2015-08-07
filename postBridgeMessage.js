@@ -11,8 +11,9 @@ module .exports = function(bridgeData, callback){
   var
     netAddresses = os.networkInterfaces(),
     options = {
-      hostname: netAddresses.en1[1].address,
-      port: 3002,
+      // hostname: netAddresses.en0[1].address,
+      hostname: "52.26.186.75",
+      port: 80,
       path: "/incoming-snmp",
       method: "POST",
       headers: {

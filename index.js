@@ -11,7 +11,7 @@ var
   netAddresses = os.networkInterfaces(),
   options      = {
     // netAddresses gets local ip address
-    addr: netAddresses.en1[1].address,
+    addr: netAddresses.en0[1].address,
     port: 4000,
     family: 'udp4'
   }
@@ -62,6 +62,7 @@ trapd.on('trap',function(msg) {
       postBridgeMessage(bridgeMessage, function(err, res){
         console.log(res);
       });
+      streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString())
   };
   parseBridge(bridgeData);
 });
