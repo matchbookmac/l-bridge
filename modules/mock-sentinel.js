@@ -1,12 +1,9 @@
-module .exports = function(status){
-  var
-    snmp = require('snmpjs'),
-    path = require("path")
-  ;
-  var
-    ipAddress = require('../modules/find-address.js')()
-  ;
+var
+  snmp = require('snmpjs'),
+  ipAddress = require('../modules/find-address.js')()
+;
 
+module .exports = function(status, cb){
   var
     client    = snmp.createClient({}),
     ip        = ipAddress,
@@ -22,11 +19,9 @@ module .exports = function(status){
   			})
   		})
     ],
-    callback  = function (msg) {
-      console.log(msg);
-    }
+    callback  = function () {}
   ;
-
   // client.inform(IP address, SNMP trap community, Uptime, OID of sender, Varbinds, Callback);
   client.inform(ip, community, 0, oid, varbinds, callback);
+  client.close();
 }
