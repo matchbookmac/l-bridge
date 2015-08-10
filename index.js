@@ -7,7 +7,8 @@ var
   os                = require('os'),
   ip                = require('ip'),
   // ipAddress         = require('./modules/find-address.js')(),
-  postBridgeMessage = require('./modules/post-bridge-message.js')
+  postBridgeMessage = require('./modules/post-bridge-message.js'),
+  saveBridgeMessage = require('./modules/save-bridge-message.js')
 ;
 
 var
@@ -78,6 +79,7 @@ trapd.on('trap',function(msg) {
       postBridgeMessage(bridgeMessage, function(err, res){
         wlog.info(res.status.toString());
       });
+      saveBridgeMessage(bridgeMessage);
       streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
       wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
     } else {
