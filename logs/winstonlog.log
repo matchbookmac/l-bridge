@@ -6,3 +6,15 @@
 {"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:25:30.200Z"}
 {"level":"info","message":"cuevas status changed to false at Fri Aug 07 2015 16:25:42 GMT-0700 (PDT)","timestamp":"2015-08-07T23:25:42.224Z"}
 {"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:25:42.262Z"}
+{"level":"info","message":"Sentinel restart","timestamp":"2015-08-07T23:29:25.098Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:29:25.233Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:29:25.252Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:29:25.256Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:29:25.257Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:29:25.261Z"}
+{"level":"info","message":"cuevas status changed to false at Fri Aug 07 2015 16:30:05 GMT-0700 (PDT)","timestamp":"2015-08-07T23:30:05.480Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:30:05.814Z"}
+{"level":"info","message":"cuevas status changed to true at Fri Aug 07 2015 16:30:46 GMT-0700 (PDT)","timestamp":"2015-08-07T23:30:46.666Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:30:46.716Z"}
+{"level":"info","message":"cuevas status changed to false at Fri Aug 07 2015 16:30:58 GMT-0700 (PDT)","timestamp":"2015-08-07T23:30:59.000Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:30:59.038Z"}

@@ -14,5 +14,5 @@ module .exports = function(){
       });
     }
   }
-  return address[0].toString();
+  // return address[0].toString();
 }
