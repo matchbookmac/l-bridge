@@ -10,9 +10,9 @@ module .exports = function(){
   for(var key in netAddresses) {
     if(key.indexOf('e') == 0) {
       netAddresses[key].forEach(function (addrObj) {
-        address = addrObj.address.match(addrRegEx)
+        address = addrObj.address.match(addrRegEx);
       });
     }
   }
-  // return address[0].toString();
+  return address[0].toString();
 }

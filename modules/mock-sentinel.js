@@ -3,7 +3,7 @@ var
   ipAddress = require('../modules/find-address.js')()
 ;
 
-module .exports = function(status, cb){
+module .exports = function(status){
   var
     client    = snmp.createClient({}),
     ip        = ipAddress,

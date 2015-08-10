@@ -5,7 +5,8 @@ var
   fs                = require("fs"),
   path              = require('path'),
   os                = require('os'),
-  ipAddress         = require('./modules/find-address.js')(),
+  ip                = require('ip'),
+  // ipAddress         = require('./modules/find-address.js')(),
   postBridgeMessage = require('./modules/post-bridge-message.js')
 ;
 
@@ -13,7 +14,7 @@ var
   netAddresses = os.networkInterfaces(),
   options      = {
     // netAddresses gets local ip address
-    addr: ipAddress,
+    addr: ip.address(),
     port: 162,
     family: 'udp4'
   }

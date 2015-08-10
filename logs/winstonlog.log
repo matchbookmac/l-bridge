@@ -62,3 +62,9 @@
 {"level":"info","message":"STATUS: 200","timestamp":"2015-08-10T20:25:21.497Z"}
 {"level":"info","message":"bailey's bridge status changed to true at Mon Aug 10 2015 13:26:14 GMT-0700 (PDT)","timestamp":"2015-08-10T20:26:14.380Z"}
 {"level":"info","message":"STATUS: 200","timestamp":"2015-08-10T20:26:14.426Z"}
+{"level":"info","message":"bailey's bridge status changed to false at Mon Aug 10 2015 13:30:17 GMT-0700 (PDT)","timestamp":"2015-08-10T20:30:17.218Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-10T20:30:17.272Z"}
+{"level":"info","message":"bailey's bridge status changed to true at Mon Aug 10 2015 13:41:17 GMT-0700 (PDT)","timestamp":"2015-08-10T20:41:17.300Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-10T20:41:17.383Z"}
+{"level":"info","message":"bailey's bridge status changed to false at Mon Aug 10 2015 13:41:25 GMT-0700 (PDT)","timestamp":"2015-08-10T20:41:25.544Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-10T20:41:25.805Z"}

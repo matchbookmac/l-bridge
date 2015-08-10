@@ -1,6 +1,6 @@
 For "deploying" on l-bridge (l-bridge.co.multnomah.or.us)
 
-if starting from scratch:
+If starting from scratch:
 
 ```console
 sudo apt-get nodejs
@@ -9,16 +9,35 @@ cd bridgeapp
 npm install -g forever
 ```
 
-Start server:
+###Start server:
 
 *Production:*
 ```console
-forever start index.js
+sudo forever start index.js
 ```
 
 *Development:*
 ```console
-nodemon index.js
+sudo npm start
+```
+
+###Testing:
+
+####Run test suite:
+```console
+npm test
+```
+
+####To send a test trap for a bridge:
+
+*Bridge Up*
+```console
+node modules/send-test-trap.js 1
+```
+
+*Bridge Down*
+```console
+node modules/send-test-trap.js 0
 ```
 <!--
   TODO
