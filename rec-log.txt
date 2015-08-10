@@ -1,1 +1,3 @@
-Mon Aug 10 2015 11:25:31 GMT-0700 (PDT):  Starting up SNMP Listner 
+Mon Aug 10 2015 12:36:54 GMT-0700 (PDT):  Starting up SNMP Listner 
+
+bailey's bridge status changed to false at Mon Aug 10 2015 12:37:19 GMT-0700 (PDT)

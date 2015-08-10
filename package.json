@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "mocha --reporter nyan",
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -15,12 +15,13 @@
   "license": "ISC",
   "dependencies": {
     "bunyan": "^1.4.0",
+    "chai": "^3.2.0",
     "fs": "0.0.2",
+    "mocha": "^2.2.5",
     "path": "^0.11.14",
     "snmpjs": "file:./node-snmpjs",
     "util": "^0.10.3",
     "winston": "1.0.1"
-
   },
   "devDependencies": {
     "nodemon": "^1.4.0"
