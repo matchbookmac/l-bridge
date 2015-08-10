@@ -33,26 +33,9 @@ module .exports = (function() {
   wlog.add(wlog.transports.File, { filename: 'logs/winstonlog.log'});
 
   var trapd = snmp.createTrapListener({ log: log });
-  // var
-  //   boot =  function () {
-      trapd.bind(options);
-      streamlog.write(new Date().toString() + ':  Starting up SNMP Listner \n');
-      streamraw.write(new Date().toString() + ':  Starting up SNMP Listner \n');
-    // },
-    // shutdown = function () {
-    //   trapd.close();
-    //   streamlog.write(new Date().toString() + ':  Shutting down SNMP Listner \n');
-    //   streamraw.write(new Date().toString() + ':  Shutting down SNMP Listner \n');
-    // }
-  // ;
-
-  // if (require.main === module) {
-  //   boot();
-  // } else {
-  //   console.info('Running app as a module');
-  //   exports.boot = boot;
-  //   exports.shutdown = shutdown;
-  // }
+  trapd.bind(options);
+  streamlog.write(new Date().toString() + ':  Starting up SNMP Listner \n');
+  streamraw.write(new Date().toString() + ':  Starting up SNMP Listner \n');
 
   trapd.on('trap',function(msg) {
     var
