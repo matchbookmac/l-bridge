@@ -6,15 +6,15 @@ var
   path              = require('path'),
   os                = require('os'),
   ip                = require('ip'),
+
   // ipAddress         = require('./modules/find-address.js')(),
   postBridgeMessage = require('./modules/post-bridge-message.js'),
   saveBridgeMessage = require('./modules/save-bridge-message.js')
+
 ;
 
 var
-  netAddresses = os.networkInterfaces(),
-  options      = {
-    // netAddresses gets local ip address
+    options      = {
     addr: ip.address(),
     port: 162,
     family: 'udp4'
@@ -51,17 +51,6 @@ var oids = {
 
 
 trapd.on('trap',function(msg) {
-
-  function findVarbind(varbinds) {
-    var varbind;
-    varbinds.forEach(function (varbindObject) {
-      if (oids.sentinel[varbindObject.oid] || oids.bridges[varbindObject.oid]) {
-        varbind = varbindObject;
-      }
-    });
-    return varbind;
-  }
-
   var
     timeStamp = (new Date()).toString(),
     trapData = findVarbind(msg.pdu.varbinds),
@@ -113,3 +102,13 @@ trapd.on('trap',function(msg) {
 trapd.bind(options);
 streamlog.write(new Date().toString() + ':  Starting up SNMP Listner \n');
 streamraw.write(new Date().toString() + ':  Starting up SNMP Listner \n');
+
+function findVarbind(varbinds) {
+  var varbind;
+  varbinds.forEach(function (varbindObject) {
+    if (oids.sentinel[varbindObject.oid] || oids.bridges[varbindObject.oid]) {
+      varbind = varbindObject;
+    }
+  });
+  return varbind;
+}
