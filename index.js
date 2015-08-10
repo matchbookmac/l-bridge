@@ -8,7 +8,8 @@ var
   ip                = require('ip'),
   oids              = require('./config/oids'),
   findVarbind       = require('./modules/find-varbind')
-  postBridgeMessage = require('./modules/post-bridge-message')
+  postBridgeMessage = require('./modules/post-bridge-message'),
+  saveBridgeMessage = require('./modules/save-bridge-message')
 ;
 
 module .exports = (function() {
@@ -71,6 +72,7 @@ module .exports = (function() {
         postBridgeMessage(bridgeMessage, function(err, res){
           wlog.info(res.status.toString());
         });
+        saveBridgeMessage(bridgeMessage);
         streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
         wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
       } else {
