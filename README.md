@@ -11,14 +11,19 @@ npm install -g forever
 
 ###Start server:
 
-*Production:*
+*Production (port 162):*
 ```console
-sudo forever start index.js
+npm run-script prod-start
 ```
 
-*Development:*
+*Development (port 162):*
 ```console
-sudo npm start
+npm run-script dev-start
+```
+
+*Development (port 3000):*
+```console
+npm start
 ```
 
 ###Testing:

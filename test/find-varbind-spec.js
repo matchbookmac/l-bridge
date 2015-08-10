@@ -1,6 +1,6 @@
 var
-  expect = require('chai').expect,
-  app    = require('../index.js')
+  expect      = require('chai').expect,
+  findVarbind = require('../modules/find-varbind')
 ;
 
 describe('findVarbind', function () {
@@ -25,6 +25,6 @@ describe('findVarbind', function () {
       }
     ;
     var varbinds = [varbind0, varbind1, varbind2]
-    expect(app.findVarbind(varbinds)).to.equal(varbind2);
+    expect(findVarbind(varbinds)).to.equal(varbind2);
   });
-})
+});
