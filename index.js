@@ -5,15 +5,15 @@ var
   fs                = require("fs"),
   path              = require('path'),
   os                = require('os'),
-  ipAddress         = require('./findAddress.js'),
-  postBridgeMessage = require('./postBridgeMessage.js')
+  ipAddress         = require('./findAddress.js')(),
+  postBridgeMessage = require('./post-bridge-message.js')
 ;
 
 var
   netAddresses = os.networkInterfaces(),
   options      = {
     // netAddresses gets local ip address
-    addr: '172.20.198.7',
+    addr: ipAddress,
     port: 162,
     family: 'udp4'
   }
@@ -27,14 +27,19 @@ var streamlog = fs.WriteStream('rec-log.txt',{ flags: 'w',
   mode: 0666 });
 
 var log = new bunyan({ name: 'snmpd', level: 'trace'});
+
 wlog.add(wlog.transports.File, { filename: 'logs/winstonlog.log'});
+
 var trapd = snmp.createTrapListener({ log: log });
 
 var oids = {
   //using oid's as keys for bridgenames
-  "1.3.6.1.2.1.1.1.0":               "Sentinel 16 is up",
+  sentinel: {
+    "1.3.6.1.2.1.1.1.0":               "Sentinel 16 is up"
+  },
   bridges: {
-    "1.3.6.1.4.1.20839.1.2.1.1.1.2.5": "cuevas",
+    "1.3.6.1.4.1.20839.1.2.1.1.1.2.6": "bailey's bridge",
+    "1.3.6.1.4.1.20839.1.2.1.1.1.2.5": "cuevas crossing",
     "1.3.6.1.4.1.20839.1.2.1.1.1.2.4": "broadway",
     "1.3.6.1.4.1.20839.1.2.1.1.1.2.3": "burnside",
     "1.3.6.1.4.1.20839.1.2.1.1.1.2.2": "morrison",
@@ -44,15 +49,26 @@ var oids = {
 
 
 trapd.on('trap',function(msg) {
+
+  function findVarbind(varbinds) {
+    var varbind;
+    varbinds.forEach(function (varbindObject) {
+      if (oids.sentinel[varbindObject.oid] || oids.bridges[varbindObject.oid]) {
+        varbind = varbindObject;
+      }
+    });
+    return varbind;
+  }
+
   var
     timeStamp = (new Date()).toString(),
-    trapData = msg.pdu.varbinds[0],
-    agentAddress = msg.pdu.agent_addr,
+    trapData = findVarbind(msg.pdu.varbinds),
+    agentAddress = msg.src.address,
     community = "bridgestat"
   ;
 
   function parseBridge(trapData) {
-    if (oids[trapData.oid] != "Sentinel 16 is up") {
+    if (oids.sentinel[trapData.oid] != "Sentinel 16 is up") {
       var bridgeMessage = {
         bridge:oids.bridges[trapData.oid],
         status:trapData.data.value == 1,
@@ -84,7 +100,11 @@ trapd.on('trap',function(msg) {
       }
     }
   };
-  parseBridge(trapData);
+
+  if (trapData) {
+    parseBridge(trapData);
+  }
+
 });
 
 trapd.bind(options);

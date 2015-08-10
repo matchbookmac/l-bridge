@@ -27,17 +27,19 @@ var client = snmp.createClient({
 
 var ip = process.argv[2];
 var community = process.argv[3];
-// coldStart
-var oid = '1.3.6.1.6.3.1.1.5.1'; // process.argv[4];
+// coldStart '1.3.6.1.6.3.1.1.5.1';
+var oid = "1.3.6.1.4.1.20839.1.2.1.1.1.2.7" // Bailey's Bridge
+// process.argv[4];
+
 // var value = process.argv[5];
 
 client.inform(ip, community, 0, oid, [
 		snmp.varbind.createVarbind({
 			// sysDescr.0
-			oid: '1.3.6.1.2.1.1.1.0',
+			oid: '1.3.6.1.4.1.20839.1.2.1.1.1.2.7',
 			data: snmp.data.createData({
-				type: 'OctetString',
-				value: 'TEST'
+				type: 'Integer',
+				value: 1
 			})
 		})
 ], callback);

@@ -18,3 +18,7 @@
 {"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:30:46.716Z"}
 {"level":"info","message":"cuevas status changed to false at Fri Aug 07 2015 16:30:58 GMT-0700 (PDT)","timestamp":"2015-08-07T23:30:59.000Z"}
 {"level":"info","message":"STATUS: 200","timestamp":"2015-08-07T23:30:59.038Z"}
+{"level":"info","message":"cuevas crossing status changed to true at Mon Aug 10 2015 11:24:06 GMT-0700 (PDT)","timestamp":"2015-08-10T18:24:06.461Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-10T18:24:06.511Z"}
+{"level":"info","message":"bailey's bridge status changed to true at Mon Aug 10 2015 11:24:41 GMT-0700 (PDT)","timestamp":"2015-08-10T18:24:41.512Z"}
+{"level":"info","message":"STATUS: 200","timestamp":"2015-08-10T18:24:41.569Z"}
