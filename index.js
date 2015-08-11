@@ -62,11 +62,9 @@ module .exports = (function() {
         });
         //Create bridge event and save to database if it's a closing event
         createBridgeEvent(bridgeMessage);
-        //Save bridge message to database
-        // saveBridgeMessage(bridgeMessage);
         //Write to txt log
         streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
-        //write to winston logger
+        //Write to winston logger
         wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
 
       } else {

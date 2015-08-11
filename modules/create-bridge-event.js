@@ -16,9 +16,18 @@ console.log('foo');
     timeStamp = moment(bridgeMessage.timeStamp).format("YYYY/MM/DD HH:mm:ss").toString()
   ;
 
-    connection.connect();
+    connection.connect(function(err){
+      if (err) {
+        wlog.info("MYSQL connection error: " + err.code)
+        wlog.info("MYSQL connection error fatal?: " + err.fatal)
+      }
+      else{
+        wlog.info("MYSQL connection: successful. ")
+      }
+    });
 
     if (bridgeMessage.status == false){
+      console.log("(false) bridgeMessage.status = " + bridgeMessage.status);
       for (i = 0; i < bridgeOpenings.length; i++){
         //check to see if there are any open bridge events that correspond with this close event
         if (bridgeOpenings[i].name = bridgeName){
@@ -32,6 +41,8 @@ console.log('foo');
       }
 
     } else if (bridgeMessage.status == true) {
+      console.log("(true) bridgeMessage.status = " + bridgeMessage.status);
+
       var bridgeEvent = {
         name: bridgeName,
         uptime: timeStamp
