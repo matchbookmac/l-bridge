@@ -41,49 +41,64 @@ module .exports = (function() {
   trapd.on('trap',function(msg) {
     var
       timeStamp = (new Date()).toString(),
-      trapData = findVarbind(msg.pdu.varbinds),
-      agentAddress = "172.20.15.236",
-      // msg.src.address,
+      trapData = findVarbind(msg.pdu.varbinds)
+    ;
+    var
+      agentAddress = msg.src.address,
+      // "172.20.15.236",
       community = "bridgestat"
     ;
 
-    function parseBridge(trapData) {
-      if (oids.sentinel[trapData.oid] != "Sentinel 16 is up") {
-        var bridgeMessage = {
-          bridge:oids.bridges[trapData.oid],
-          status:trapData.data.value == 1,
-          timeStamp:timeStamp
-        }
-        postBridgeMessage(bridgeMessage, function(res, status){
-          wlog.info("Request Status:" + status, res);
-        });
-        // saveBridgeMessage(bridgeMessage);
-        streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
-        wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
-      } else {
-        wlog.info("Sentinel restart")
-        var client = snmp.createClient({ log: log });
-        for (var oid in oids.bridges) {
-          if (oids.bridges.hasOwnProperty(oid)) {
-            client.get(agentAddress, community, 0, oid, function (snmpmsg) {
-              var timeStamp = (new Date()).toString();
-              var bridgeMessage = {
-                bridge:oids.bridges[snmpmsg.pdu.varbinds[0].oid],
-                status:snmpmsg.pdu.varbinds[0].data.value == 1,
-                timeStamp:timeStamp
-              }
-              postBridgeMessage(bridgeMessage, function(err, res){
-                wlog.info(res.status.toString());
-              });
-            });
-          }
+    if (trapData && (oids.sentinel[trapData.oid] != "Sentinel 16 is up")) {
+
+        parseBridge(trapData, timeStamp);
+
+    } else {
+
+      wlog.info("Sentinel restart")
+
+      var client = snmp.createClient({ log: log });
+      for (var oid in oids.bridges) {
+        if (oids.bridges.hasOwnProperty(oid)) {
+          client.get(agentAddress, community, 0, oid, function (snmpmsg) {
+
+
+            var
+              timeStamp = (new Date()).toString(),
+              trapData = findVarbind(msg.pdu.varbinds)
+            ;
+            parseBridge(trapData, timeStamp);
+            // var bridgeMessage = {
+            //   bridge:oids.bridges[snmpmsg.pdu.varbinds[0].oid],
+            //   status:snmpmsg.pdu.varbinds[0].data.value == 1,
+            //   timeStamp:timeStamp
+            // }
+            // postBridgeMessage(bridgeMessage, function(err, res){
+            //   wlog.info(res.status.toString());
+            // });
+
+          });
         }
       }
-    };
-
-    if (trapData) {
-      parseBridge(trapData);
     }
 
+
   });
+
+  function parseBridge(trapData, timeStamp) {
+    var bridgeMessage = {
+      bridge:oids.bridges[trapData.oid],
+      status:trapData.data.value == 1,
+      timeStamp:timeStamp
+    }
+    var successLogString = bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString();
+
+    postBridgeMessage(bridgeMessage, function(res, status){
+      wlog.info("Request Status: " + status, res);
+      streamlog.write('\n' + successLogString);
+      wlog.info(successLogString);
+      saveBridgeMessage(bridgeMessage);
+    });
+  }
+
 })();
