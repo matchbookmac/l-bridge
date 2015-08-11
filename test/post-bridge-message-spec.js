@@ -20,6 +20,7 @@ describe('postBridgeMessage', function () {
     }
     postBridgeMessage(bridgeMessage, function(res, status){
       expect(status).to.equal(200);
+      expect(res).to.be.a('string');
       done();
     });
   });
