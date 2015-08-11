@@ -8,6 +8,7 @@ describe('parseBridge', function () {
     // TODO make full mock of Sentinel with snmp.createAgent
     // can make the agen and pass back an object with a variety of handlers
   // like on line 72 of /Users/macdoni/code/bridgeapp/node-snmpjs/lib/mib/mib-2/system.js
+  // you are doing this so that you can get an actual trapData to test below
   })
   it('successfully parses trap data into a bridge message', function (done) {
     var
