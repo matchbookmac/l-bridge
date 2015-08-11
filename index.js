@@ -8,6 +8,7 @@ var
   findVarbind       = require('./modules/find-varbind')
   postBridgeMessage = require('./modules/post-bridge-message'),
   parseBridge       = require('./modules/parse-bridge'),
+  saveBridgeMessage = require('./modules/save-bridge-message'),
   port              = parseInt(process.argv[2])
 ;
 
@@ -41,9 +42,17 @@ module .exports = (function() {
       timeStamp = (new Date()).toString(),
       trapData = findVarbind(msg.pdu.varbinds)
     ;
-
+console.log(trapData)
     if (trapData && (oids.sentinel[trapData.oid] != "Sentinel 16 is up")) {
-      parseBridge(trapData, timeStamp);
+      var bridgeMessage = parseBridge(trapData, timeStamp);
+
+      var successLogString = bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString();
+
+      postBridgeMessage(bridgeMessage, function(res, status){
+        wlog.info("Request Status: " + status, res);
+        wlog.info(successLogString);
+        saveBridgeMessage(bridgeMessage);
+      });
     } else {
       wlog.info("Sentinel restart")
       var
@@ -59,7 +68,15 @@ module .exports = (function() {
               timeStamp = (new Date()).toString(),
               trapData = findVarbind(msg.pdu.varbinds)
             ;
-            parseBridge(trapData, timeStamp);
+            var bridgeMessage = parseBridge(trapData, timeStamp);
+
+            var successLogString = bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString();
+
+            postBridgeMessage(bridgeMessage, function(res, status){
+              wlog.info("Request Status: " + status, res);
+              wlog.info(successLogString);
+              saveBridgeMessage(bridgeMessage);
+            });
           });
         }
       }

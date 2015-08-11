@@ -1,6 +1,9 @@
 var snmp = require('snmpjs');
 
-module .exports = function(options){
+
+function Sentinel() {}
+
+Sentinel.prototype.sendTrap = function sendTrap(options){
   var ip = require('ip');
   var
     client    = snmp.createClient({}),
@@ -27,3 +30,5 @@ module .exports = function(options){
   client.inform(ip, community, 0, oid, varbinds, callback);
   client.close();
 }
+
+module.exports = new Sentinel();

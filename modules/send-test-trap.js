@@ -16,4 +16,4 @@ if (community) options.community = community;
 if (oid)       options.oid       = oid;
 if (status)    options.status    = status;
 
-sentinel(options);
+sentinel.sendTrap(options);
