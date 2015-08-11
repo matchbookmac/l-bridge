@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --reporter nyan",
-    "start": "nodemon index.js",
-    "dev-start": "sudo nodemon index.js null 162",
-    "prod-start": "sudo forever start index.js 162",
+    "start": "nodemon index.js 3000",
+    "dev-start": "sudo nodemon index.js",
+    "prod-start": "sudo forever start index.js",
     "stop": "sudo forever stop index.js"
   },
   "repository": {

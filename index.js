@@ -9,14 +9,15 @@ var
   oids              = require('./config/oids'),
   findVarbind       = require('./modules/find-varbind')
   postBridgeMessage = require('./modules/post-bridge-message'),
-  saveBridgeMessage = require('./modules/save-bridge-message')
+  saveBridgeMessage = require('./modules/save-bridge-message'),
+  port              = parseInt(process.argv[2])
 ;
 
 module .exports = (function() {
   var
     options   = {
       addr: ip.address(),
-      port: parseInt(process.argv[3]) || 3000,
+      port: port || 162,
       family: 'udp4'
     },
     streamraw = fs.WriteStream('rec-raw.json',{
