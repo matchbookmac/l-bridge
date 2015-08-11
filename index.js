@@ -54,10 +54,20 @@ module .exports = (function() {
           status:trapData.data.value == 1,
           timeStamp:timeStamp
         }
-        postBridgeMessage(bridgeMessage, function(err, res){
-          wlog.info(res.status.toString());
+        var stat = 'asdg';
+        postBridgeMessage(bridgeMessage, function(res, status){
+          // console.log(res, status, 0);
+          // stat = res;
+          // console.log('beep', 1);
+          // console.log(stat, 2);
+          wlog.info(res);
+          // stat = status;
         });
-        saveBridgeMessage(bridgeMessage);
+        // setInterval(function () {
+        //   console.log(stat, 3);
+        // }, 4000)
+        // console.log(stat)
+        // saveBridgeMessage(bridgeMessage);
         streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
         wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
       } else {

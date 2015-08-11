@@ -1,19 +1,17 @@
 module .exports = function(bridgeData, callback){
 
   var
-    snmp = require('snmpjs'),
-    http = require('http'),
-    wlog = require('winston'),
-    os   = require('os')
+    http     = require('http'),
+    wlog     = require('winston'),
+    ip       = require('ip'),
+    response = '',
+    error    = ''
   ;
 
   bridgeData = JSON.stringify(bridgeData);
 
   var
-    netAddresses = os.networkInterfaces(),
     options = {
-
-      // hostname: netAddresses.en0[1].address,
       hostname: "52.26.186.75",
       port: 80,
       path: "/incoming-snmp",
@@ -26,16 +24,30 @@ module .exports = function(bridgeData, callback){
   ;
 
   var req = http.request(options, function (res) {
-    wlog.info('STATUS: ' + res.statusCode);
+    // response = res;
+    // wlog.info('STATUS: ' + res.statusCode);
     res.setEncoding('utf8');
-    res.pipe(process.stdout);
+    callback(res, res.statusCode);
+// console.log(res.statusCode.toString())
+
+    // res.on('data', function (chunk) {
+    //   response += chunk;
+    // });
+    // res.on('end', function () {
+    //   callback(response, res.statusCode.toString());
+    // });
+
   });
 
   req.on("error", function (err) {
-    wlog.info("problem with request: " + err.message);
+// console.log(err)
+    callback(err.message, null);
   });
+// console.log(err);
+//     error = err;
+    // wlog.info("problem with request: " + err.message);
+  // });
 
   req.write(bridgeData);
   req.end();
-  // END POST
 }
