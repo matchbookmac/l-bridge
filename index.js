@@ -42,7 +42,8 @@ module .exports = (function() {
     var
       timeStamp = (new Date()).toString(),
       trapData = findVarbind(msg.pdu.varbinds),
-      agentAddress = msg.src.address,
+      agentAddress = "172.20.15.236",
+      // msg.src.address,
       community = "bridgestat"
     ;
 
@@ -60,7 +61,6 @@ module .exports = (function() {
         streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
         wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
       } else {
-        console.log("Sentinel has started up");
         wlog.info("Sentinel restart")
         var client = snmp.createClient({ log: log });
         for (var oid in oids.bridges) {
