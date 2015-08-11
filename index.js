@@ -3,13 +3,11 @@ var
   bunyan            = require('bunyan'),
   wlog              = require('winston'),
   fs                = require("fs"),
-  path              = require('path'),
-  os                = require('os'),
   ip                = require('ip'),
   oids              = require('./config/oids'),
   findVarbind       = require('./modules/find-varbind')
   postBridgeMessage = require('./modules/post-bridge-message'),
-  saveBridgeMessage = require('./modules/save-bridge-message'),
+  parseBridge       = require('./modules/parse-bridge'),
   port              = parseInt(process.argv[2])
 ;
 
@@ -43,62 +41,28 @@ module .exports = (function() {
       timeStamp = (new Date()).toString(),
       trapData = findVarbind(msg.pdu.varbinds)
     ;
-    var
-      agentAddress = msg.src.address,
-      // "172.20.15.236",
-      community = "bridgestat"
-    ;
 
     if (trapData && (oids.sentinel[trapData.oid] != "Sentinel 16 is up")) {
-
-        parseBridge(trapData, timeStamp);
-
+      parseBridge(trapData, timeStamp);
     } else {
-
       wlog.info("Sentinel restart")
-
-      var client = snmp.createClient({ log: log });
+      var
+        client = snmp.createClient({ log: log }),
+        agentAddress = msg.src.address,
+        // "172.20.15.236",
+        community = "bridgestat"
+      ;
       for (var oid in oids.bridges) {
         if (oids.bridges.hasOwnProperty(oid)) {
           client.get(agentAddress, community, 0, oid, function (snmpmsg) {
-
-
             var
               timeStamp = (new Date()).toString(),
               trapData = findVarbind(msg.pdu.varbinds)
             ;
             parseBridge(trapData, timeStamp);
-            // var bridgeMessage = {
-            //   bridge:oids.bridges[snmpmsg.pdu.varbinds[0].oid],
-            //   status:snmpmsg.pdu.varbinds[0].data.value == 1,
-            //   timeStamp:timeStamp
-            // }
-            // postBridgeMessage(bridgeMessage, function(err, res){
-            //   wlog.info(res.status.toString());
-            // });
-
           });
         }
       }
     }
-
-
   });
-
-  function parseBridge(trapData, timeStamp) {
-    var bridgeMessage = {
-      bridge:oids.bridges[trapData.oid],
-      status:trapData.data.value == 1,
-      timeStamp:timeStamp
-    }
-    var successLogString = bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString();
-
-    postBridgeMessage(bridgeMessage, function(res, status){
-      wlog.info("Request Status: " + status, res);
-      streamlog.write('\n' + successLogString);
-      wlog.info(successLogString);
-      saveBridgeMessage(bridgeMessage);
-    });
-  }
-
 })();

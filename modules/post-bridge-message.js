@@ -1,9 +1,11 @@
-module .exports = function(bridgeData, callback){
+var
+  http     = require('http'),
+  wlog     = require('winston'),
+  ip       = require('ip')
+;
 
+module .exports = function(bridgeData, callback){
   var
-    http     = require('http'),
-    wlog     = require('winston'),
-    ip       = require('ip'),
     response = '',
     error    = ''
   ;
