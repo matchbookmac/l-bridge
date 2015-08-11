@@ -1,16 +1,19 @@
 var
-  snmp              = require('snmpjs'),
-  bunyan            = require('bunyan'),
-  wlog              = require('winston'),
-  fs                = require("fs"),
-  path              = require('path'),
-  os                = require('os'),
-  ip                = require('ip'),
-  oids              = require('./config/oids'),
-  findVarbind       = require('./modules/find-varbind')
-  postBridgeMessage = require('./modules/post-bridge-message'),
-  saveBridgeMessage = require('./modules/save-bridge-message'),
-  port              = parseInt(process.argv[2])
+  snmp                = require('snmpjs'),
+  bunyan              = require('bunyan'),
+  wlog                = require('winston'),
+  fs                  = require("fs"),
+  path                = require('path'),
+  os                  = require('os'),
+  ip                  = require('ip'),
+  oids                = require('./config/oids'),
+  findVarbind         = require('./modules/find-varbind')
+  postBridgeMessage   = require('./modules/post-bridge-message'),
+  // saveBridgeMessage   = require('./modules/save-bridge-message'),
+  createBridgeEvent   = require('./modules/create-bridge-event'),
+  port                = parseInt(process.argv[2]),
+  bridgeOpenings = []
+
 ;
 
 module .exports = (function() {
@@ -53,15 +56,24 @@ module .exports = (function() {
           status:trapData.data.value == 1,
           timeStamp:timeStamp
         }
+        //Post message to A-Bridge
         postBridgeMessage(bridgeMessage, function(err, res){
           wlog.info(res.status.toString());
         });
-        saveBridgeMessage(bridgeMessage);
+        //Create bridge event and save to database if it's a closing event
+        createBridgeEvent(bridgeMessage);
+        //Save bridge message to database
+        // saveBridgeMessage(bridgeMessage);
+        //Write to txt log
         streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
+        //write to winston logger
         wlog.info(bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
+
       } else {
+        //Handle sentinel restart using OID for that action
         console.log("Sentinel has started up");
         wlog.info("Sentinel restart")
+        //Checking status of bridges after restart of sentinel
         var client = snmp.createClient({ log: log });
         for (var oid in oids.bridges) {
           if (oids.bridges.hasOwnProperty(oid)) {
