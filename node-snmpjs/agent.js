@@ -8,7 +8,7 @@ var mib = require('./lib/mib/index.js');
 var bunyan = require('bunyan');
 var fs = require('fs');
 
-var config = process.argv[2] || 'agent.json';
+var config = process.argv[2] || './agent.json';
 var cfstr = fs.readFileSync(config);
 var cf, log_cf;
 var log, agent;

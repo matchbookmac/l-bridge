@@ -1,4 +1,8 @@
-var snmp = require('snmpjs');
+var
+  bunyan = require('bunyan'),
+  snmp   = require('snmpjs'),
+  mibs   = require('../config/mibs')
+;
 
 
 function Sentinel() {}
@@ -29,6 +33,16 @@ Sentinel.prototype.sendTrap = function sendTrap(options){
   // client.inform(IP address, SNMP trap community, Uptime, OID of sender, Varbinds, Callback);
   client.inform(ip, community, 0, oid, varbinds, callback);
   client.close();
+}
+
+Sentinel.prototype.simulate = function simulate() {
+  var log, agent;
+
+  log = new bunyan({ name: 'snmpd', level: 'trace'})
+  agent = snmp.createAgent({ log: log });
+// console.log(snmp.provider.readOnlyScalar)
+  agent.request(mibs);
+  agent.bind({ family: 'udp4', port: 3000 });
 }
 
 module.exports = new Sentinel();
