@@ -5,13 +5,7 @@ var
 ;
 
 module .exports = function(bridgeData, callback){
-  var
-    response = '',
-    error    = ''
-  ;
-
   bridgeData = JSON.stringify(bridgeData);
-
   var
     options = {
       hostname: "52.26.186.75",
@@ -22,22 +16,28 @@ module .exports = function(bridgeData, callback){
         "Content-Type": "application/json",
         "Content-Length": bridgeData.length
       }
-    }
+    },
+    response = ''
   ;
 
   var req = http.request(options, function (res) {
     res.setEncoding('utf8');
     var status = res.statusCode;
+
     res.on('data', function (chunk) {
       response += chunk;
     });
+
     res.on('end', function () {
-      callback(response, status);
-    })
+      if (callback) callback(response, status);
+      var successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
+      wlog.info("Request Status: " + status, res);
+      wlog.info(successLogString);
+    });
   });
 
   req.on("error", function (err) {
-    callback(err.message, null);
+    if (callback) callback(err.message, null);
   });
 
   req.write(bridgeData);
