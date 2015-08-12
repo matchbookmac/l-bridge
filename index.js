@@ -21,7 +21,12 @@ module .exports = (function() {
     log     = new bunyan({ name: 'snmpd', level: 'trace'})
   ;
 
-  wlog.add(wlog.transports.File, { filename: 'logs/winstonlog.log'});
+  wlog.add(wlog.transports.File, {
+    filename: 'logs/winstonlog.log',
+    timestamp: function () {
+      return (new Date()).toString();
+    }
+  });
 
   var trapd = snmp.createTrapListener({ log: log });
   trapd.bind(options);
