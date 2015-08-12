@@ -39,10 +39,9 @@ Sentinel.prototype.simulate = function simulate() {
   var log, agent;
 
   log = new bunyan({ name: 'snmpd', level: 'trace'})
-  agent = snmp.createAgent({ log: log });
-// console.log(snmp.provider.readOnlyScalar)
+  agent = snmp.createAgent();
   agent.request(mibs);
-  agent.bind({ family: 'udp4', port: 3000 });
+  agent.bind({ family: 'udp4', port: 161 });
 }
 
 module.exports = new Sentinel();

@@ -3,7 +3,6 @@ var snmp = require('snmpjs');
 function
 createSentinelTrapData(prq)
 {
-console.log(prq);
 	var val = snmp.data.createData({ type: 'Integer', value: 0 });
 	snmp.provider.readOnlyScalar(prq, val);
 }
