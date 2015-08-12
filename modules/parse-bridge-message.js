@@ -1,14 +1,26 @@
 var
-  oids        = require('../config/oids'),
-  findVarbind = require('./find-varbind')
+  oids        = require('../config/oids')
 ;
 
+function findVarbind(snmpmsg) {
+  var
+    varbind,
+    varbinds = snmpmsg.pdu.varbinds
+  ;
+  varbinds.forEach(function (varbindObject) {
+    if (oids.sentinel[varbindObject.oid] || oids.bridges[varbindObject.oid]) {
+      varbind = varbindObject;
+    }
+  });
+  return varbind;
+}
+
 function getMsgOID(msg) {
-  return findVarbind(msg.pdu.varbinds).oid;
+  return findVarbind(msg).oid;
 }
 
 function parseBridgeMessage(snmpmsg, timeStamp) {
-  var trapData = findVarbind(snmpmsg.pdu.varbinds)
+  var trapData = findVarbind(snmpmsg)
   return {
     bridge:oids.bridges[trapData.oid],
     status:trapData.data.value == 1,
@@ -17,6 +29,7 @@ function parseBridgeMessage(snmpmsg, timeStamp) {
 }
 
 module .exports = {
+  findVarbind: findVarbind,
   getMsgOID: getMsgOID,
   parseBridgeMessage: parseBridgeMessage
 }

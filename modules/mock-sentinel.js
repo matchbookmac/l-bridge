@@ -42,6 +42,7 @@ Sentinel.prototype.simulate = function simulate() {
   agent = snmp.createAgent();
   agent.request(mibs);
   agent.bind({ family: 'udp4', port: 161 });
+  return agent;
 }
 
 module.exports = new Sentinel();

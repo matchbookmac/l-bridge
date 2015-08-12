@@ -5,7 +5,6 @@ var
   fs                 = require("fs"),
   ip                 = require('ip'),
   oids               = require('./config/oids'),
-  findVarbind        = require('./modules/find-varbind')
   postBridgeMessage  = require('./modules/post-bridge-message'),
   parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage,
   getMsgOID          = require('./modules/parse-bridge-message').getMsgOID,
