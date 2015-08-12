@@ -10,9 +10,9 @@ var
   findVarbind         = require('./modules/find-varbind')
   postBridgeMessage   = require('./modules/post-bridge-message'),
   // saveBridgeMessage   = require('./modules/save-bridge-message'),
-  createBridgeEvent   = require('./modules/create-bridge-event'),
-  port                = parseInt(process.argv[2]),
-  bridgeOpenings = []
+  // createBridgeEvent   = require('./modules/create-bridge-event'),
+  // bridgeOpenings = [],
+  port                = parseInt(process.argv[2])
 
 ;
 
@@ -61,7 +61,7 @@ module .exports = (function() {
           wlog.info(res.status.toString());
         });
         //Create bridge event and save to database if it's a closing event
-        createBridgeEvent(bridgeMessage);
+        // createBridgeEvent(bridgeMessage);
         //Write to txt log
         streamlog.write('\n' + bridgeMessage.bridge.toString() + " status changed to " + bridgeMessage.status.toString() + " at " + bridgeMessage.timeStamp.toString());
         //Write to winston logger
