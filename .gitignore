@@ -2,3 +2,4 @@
 .DS_Store
 rec-log.txt
 rec-raw.json
+/logs/*
