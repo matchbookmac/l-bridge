@@ -1,0 +1,9 @@
+{"level":"info","message":"Wed Aug 12 2015 15:05:48 GMT-0700 (PDT):  Starting up SNMP Listner \n","timestamp":"2015-08-12T22:05:48.745Z"}
+{"level":"info","message":"Wed Aug 12 2015 15:06:17 GMT-0700 (PDT):  Starting up SNMP Listner \n","timestamp":"2015-08-12T22:06:17.755Z"}
+{"level":"info","message":"Wed Aug 12 2015 15:06:32 GMT-0700 (PDT):  Starting up SNMP Listner \n","timestamp":"2015-08-12T22:06:32.449Z"}
+{"level":"info","message":"Request Status: 200 post received","timestamp":"2015-08-12T22:06:42.584Z"}
+{"level":"info","message":"bailey's bridge status changed to false at Wed Aug 12 2015 15:06:42 GMT-0700 (PDT)","timestamp":"2015-08-12T22:06:42.585Z"}
+{"level":"info","message":"Request Status: 200 post received","timestamp":"2015-08-12T22:06:47.598Z"}
+{"level":"info","message":"bailey's bridge status changed to true at Wed Aug 12 2015 15:06:47 GMT-0700 (PDT)","timestamp":"2015-08-12T22:06:47.598Z"}
+{"level":"info","message":"Request Status: 200 post received","timestamp":"2015-08-12T22:06:53.354Z"}
+{"level":"info","message":"bailey's bridge status changed to false at Wed Aug 12 2015 15:06:53 GMT-0700 (PDT)","timestamp":"2015-08-12T22:06:53.355Z"}
