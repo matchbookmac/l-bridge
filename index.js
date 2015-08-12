@@ -30,7 +30,7 @@ module .exports = (function() {
   trapd.on('trap',function(msg) {
     var
       msgOID    = getMsgOID(msg),
-      timeStamp = (new Date()).toUTCString()
+      timeStamp = (new Date()).toString()
     ;
     if (msgOID && (oids.sentinel[msgOID] != "Sentinel 16 is up")) {
       var bridgeMessage = parseBridgeMessage(msg, timeStamp);
@@ -46,7 +46,7 @@ module .exports = (function() {
       for (var oid in oids.bridges) {
         if (oids.bridges.hasOwnProperty(oid)) {
           client.get(agentAddress, community, 0, oid, function (snmpmsg) {
-            var timeStamp = (new Date()).toUTCString();
+            var timeStamp = (new Date()).toString();
             var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
             postBridgeMessage(bridgeMessage);
           });
