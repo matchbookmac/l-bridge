@@ -5,6 +5,7 @@ var
 ;
 
 module .exports = function(bridgeData, callback){
+  var successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
   bridgeData = JSON.stringify(bridgeData);
   var
     options = {
@@ -30,8 +31,7 @@ module .exports = function(bridgeData, callback){
 
     res.on('end', function () {
       if (callback) callback(response, status);
-      var successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
-      wlog.info("Request Status: " + status, res);
+      wlog.info("Request Status: " + status, response);
       wlog.info(successLogString);
     });
   });
