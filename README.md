@@ -6,7 +6,8 @@ If starting from scratch:
 sudo apt-get nodejs
 git clone https://multco.git.beanstalkapp.com/bridgeapp.git
 cd bridgeapp
-npm install -g forever
+npm install -g forever mocha nodemon
+npm install
 ```
 
 ###Start server:
