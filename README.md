@@ -38,13 +38,28 @@ npm test
 
 *Bridge Up*
 ```console
-node modules/send-test-trap.js 1
+node modules/send-test-trap.js -s 1
 ```
 
 *Bridge Down*
 ```console
-node modules/send-test-trap.js 0
+node modules/send-test-trap.js -s 0
 ```
+
+*Options*
+```console
+-i | --ip        : IP Address for where l-bridge instance is located. Default is
+                   the IP address for the current machine.
+-c | --community : Community option for SNMP trap. Default is `public`.
+-o | --oid       : OID of the trap being sent. Default is
+                   `1.3.6.1.4.1.20839.1.2.1.1.1.2.6`, which corresponds to
+                   `bailey's bridge` on l-bridge.
+-s | --status    : Specify up or down. 1: bridge is raising, 0: bridge is
+                   lowering. Default is 0.
+
+Extraneous options with `-` or `--` that are not listed above will be ignored.
+```
+
 <!--
   TODO
   When deploying on server, where do we want to store the code?
