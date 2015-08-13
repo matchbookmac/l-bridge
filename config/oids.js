@@ -12,6 +12,6 @@ module .exports = (function () {
       "1.3.6.1.4.1.20839.1.2.1.1.1.2.2": "morrison",
       "1.3.6.1.4.1.20839.1.2.1.1.1.2.1": "hawthorne"
     }
-  }
+  };
   return oids;
 })();

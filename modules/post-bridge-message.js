@@ -43,4 +43,4 @@ module .exports = function(bridgeData, callback){
 
   req.write(bridgeData);
   req.end();
-}
+};

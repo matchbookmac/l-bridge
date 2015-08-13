@@ -20,16 +20,16 @@ function getMsgOID(msg) {
 }
 
 function parseBridgeMessage(snmpmsg, timeStamp) {
-  var trapData = findVarbind(snmpmsg)
+  var trapData = findVarbind(snmpmsg);
   return {
     bridge:oids.bridges[trapData.oid],
     status:trapData.data.value == 1,
     timeStamp:timeStamp
-  }
+  };
 }
 
 module .exports = {
   findVarbind: findVarbind,
   getMsgOID: getMsgOID,
   parseBridgeMessage: parseBridgeMessage
-}
+};

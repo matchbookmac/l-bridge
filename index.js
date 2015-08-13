@@ -41,7 +41,7 @@ module .exports = (function() {
       var bridgeMessage = parseBridgeMessage(msg, timeStamp);
       postBridgeMessage(bridgeMessage);
     } else {
-      wlog.info("Sentinel restart")
+      wlog.info("Sentinel restart");
       var
         client = snmp.createClient({ log: log }),
         agentAddress = msg.src.address,

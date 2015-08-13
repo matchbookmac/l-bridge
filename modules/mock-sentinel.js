@@ -11,7 +11,7 @@ Sentinel.prototype.sendTrap = function sendTrap(options){
   var ip = require('ip');
   var
     client    = snmp.createClient({}),
-    ip        = options.ip || ip.address(),
+    ipAddr    = options.ip || ip.address(),
     // '172.20.198.7', l-bridge
     community = options.community || 'public',
     oid       = options.oid || '1.3.6.1.4.1.20839.1.2.1.1.1.2.6',  // Bailey's Bridge :P
@@ -31,18 +31,18 @@ Sentinel.prototype.sendTrap = function sendTrap(options){
     })
   ];
   // client.inform(IP address, SNMP trap community, Uptime, OID of sender, Varbinds, Callback);
-  client.inform(ip, community, 0, oid, varbinds, callback);
+  client.inform(ipAddr, community, 0, oid, varbinds, callback);
   client.close();
-}
+};
 
 Sentinel.prototype.simulate = function simulate() {
   var log, agent;
 
-  log = new bunyan({ name: 'snmpd', level: 'trace'})
+  log = new bunyan({ name: 'snmpd', level: 'trace'});
   agent = snmp.createAgent();
   agent.request(mibs);
   agent.bind({ family: 'udp4', port: 161 });
   return agent;
-}
+};
 
 module.exports = new Sentinel();

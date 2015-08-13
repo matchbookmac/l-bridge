@@ -17,7 +17,7 @@ describe('postBridgeMessage', function () {
       bridge:"bailey's bridge",
       status:true,
       timeStamp:timeStamp
-    }
+    };
     postBridgeMessage(bridgeMessage, function(res, status){
       expect(status).to.equal(200);
       expect(res).to.be.a('string');
