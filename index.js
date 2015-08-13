@@ -48,15 +48,18 @@ module .exports = (function() {
         // "172.20.15.236",
         community = "bridgestat"
       ;
+
       for (var oid in oids.bridges) {
         if (oids.bridges.hasOwnProperty(oid)) {
-          client.get(agentAddress, community, 0, oid, function (snmpmsg) {
-            var timeStamp = (new Date()).toString();
-            var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
-            postBridgeMessage(bridgeMessage);
-          });
+          client.get(agentAddress, community, 0, oid, getSNMPCallback);
         }
       }
     }
   });
 })();
+
+function getSNMPCallback(snmpmsg) {
+  var timeStamp = (new Date()).toString();
+  var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
+  postBridgeMessage(bridgeMessage);
+}
