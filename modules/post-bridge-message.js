@@ -9,8 +9,7 @@ function silenceOnTest(args) {
   return;
 }
 if (currentEnv === 'test') {
-  wlog.info = silenceOnTest;
-  process.stderr.write = silenceOnTest;
+  process.stderr.write = wlog.info = silenceOnTest;
 }
 
 module .exports = function(bridgeData, callback){
