@@ -1,11 +1,12 @@
 var
   expect            = require('chai').expect,
   nock              = require('nock'),
+  aBridgeConf           = require('../config/config').aBridge,
   postBridgeMessage = require('../modules/post-bridge-message')
 ;
 
 describe('postBridgeMessage', function () {
-  var aBridge = nock('http://52.26.186.75:80')
+  var aBridge = nock('http://' + aBridgeConf.hostname + ':' + aBridgeConf.port)
                   .post('/incoming-snmp', bridgeMessage)
                   .reply(200, "post success");
   var timeStamp = (new Date()).toString();

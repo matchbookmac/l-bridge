@@ -35,9 +35,14 @@ function oids() {
   return env.oids;
 }
 
+function aBridge() {
+  return env.aBridge;
+}
+
 module .exports = {
-  port: port(),
-  env: environment(),
+  port:    port(),
+  env:     environment(),
   envVars: envVars(),
-  oids: oids()
+  oids:    oids(),
+  aBridge: aBridge()
 };

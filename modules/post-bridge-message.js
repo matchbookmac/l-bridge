@@ -2,6 +2,7 @@ var
   http       = require('http'),
   wlog       = require('winston'),
   ip         = require('ip'),
+  aBridge    = require('../config/config').aBridge,
   currentEnv = require('../config/config').env
 ;
 
@@ -17,19 +18,15 @@ module .exports = function(bridgeData, options, callback){
   if (bridgeData.bridge && bridgeData.status && bridgeData.timeStamp) {
     successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
   }
-  var
-    headers = {
-      "Content-Type": "application/json",
-      "Content-Length": bridgeData.length
-    },
-    response = ''
-  ;
+  var response = '';
+
   if (!options) options = {};
-  options.hostname = options.hostname || "52.26.186.75";
-  options.port     = options.port     || 80;
-  options.path     = options.path     || "/incoming-snmp";
-  options.method   = options.method   || "POST";
-  options.headers  = options.headers  || headers;
+  options.hostname = options.hostname || aBridge.hostname;
+  options.port     = options.port     || aBridge.port;
+  options.path     = options.path     || aBridge.path ;
+  options.method   = options.method   || aBridge.method;
+  options.headers  = options.headers  || aBridge.headers;
+  options.headers["Content-Length"] = bridgeData.length;
 
   var req = http.request(options, function (res) {
     res.setEncoding('utf8');
