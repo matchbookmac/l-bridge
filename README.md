@@ -19,11 +19,6 @@ npm run-script prod-start
 
 *Development (port 162):*
 ```console
-npm run-script dev-start
-```
-
-*Development (port 3000):*
-```console
 npm start
 ```
 

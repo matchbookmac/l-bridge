@@ -5,7 +5,6 @@ var
   currentEnv = require('../config/config').env
 ;
 
-
 if (currentEnv === 'test') {
   process.stderr.write = wlog.info = function silenceOnTest(args) {
     return;

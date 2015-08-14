@@ -4,7 +4,7 @@ var
 ;
 
 function port() {
-  return argv.p || argv.port || 80;
+  return argv.p || argv.port || 162;
 }
 
 function environment() {
