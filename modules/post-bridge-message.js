@@ -1,8 +1,17 @@
 var
-  http     = require('http'),
-  wlog     = require('winston'),
-  ip       = require('ip')
+  http       = require('http'),
+  wlog       = require('winston'),
+  ip         = require('ip'),
+  currentEnv = require('../config/config').env
 ;
+
+function silenceOnTest(args) {
+  return;
+}
+if (currentEnv === 'test') {
+  wlog.info = silenceOnTest;
+  process.stderr.write = silenceOnTest;
+}
 
 module .exports = function(bridgeData, callback){
   var successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
