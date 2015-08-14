@@ -1,0 +1,74 @@
+var
+  expect            = require('chai').expect,
+  nock              = require('nock'),
+  postBridgeMessage = require('../modules/post-bridge-message')
+;
+
+describe('postBridgeMessage', function () {
+  var aBridge = nock('http://52.26.186.75:80');
+  var timeStamp = (new Date()).toString();
+  var bridgeMessage = {
+    bridge:"bailey's bridge",
+    status:true,
+    timeStamp:timeStamp
+  };
+  var alteredMessage = {
+    bridge:"bailey's bridge",
+    status:true,
+    timeStamp:"foo"
+  };
+  var incompleteMessage = {
+    bridge:"bailey's bridge",
+    status:true,
+  };
+
+  // HTTP 200 Success
+  aBridge.post('/incoming-snmp', bridgeMessage)
+          .reply(200, "post success");
+  // HTTP 400 Errors
+  aBridge.post('/incoming-snmp', alteredMessage)
+          .reply(400, "post fail bad message");
+  aBridge.post('/incoming-snmp', incompleteMessage)
+          .reply(400, "post fail not enough message");
+  // HTTP 404 Error
+  aBridge.post('/incoming', bridgeMessage)
+          .reply(404, "wrong place, brah");
+  // HTTP 500 Error
+  aBridge.post('/incoming-snmp', { absolute: "bollocks" })
+          .reply(500, "my bad");
+  // HTTP 200 Test
+  it('successfully posts to a-bridge', function (done) {
+    postBridgeMessage(bridgeMessage, null, function(res, status){
+      expect(status).to.equal(200);
+      done();
+    });
+  });
+  // HTTP 400 Test
+  it('errors if the message is not valid', function (done) {
+    postBridgeMessage(alteredMessage, null, function(res, status){
+      expect(status).to.equal(400);
+      done();
+    });
+  });
+  // HTTP 400 Test
+  it('errors if the message is incomplete', function (done) {
+    postBridgeMessage(incompleteMessage, null, function(res, status){
+      expect(status).to.equal(400);
+      done();
+    });
+  });
+  // HTTP 404 Test
+  it('errors if the path is incorrect', function (done) {
+    postBridgeMessage(bridgeMessage, { path: "/incoming" }, function(res, status){
+      expect(status).to.equal(404);
+      done();
+    });
+  });
+  // HTTP 500 Test
+  it('errors if the message is incomplete', function (done) {
+    postBridgeMessage({ absolute: "bollocks" }, null, function(res, status){
+      expect(status).to.equal(500);
+      done();
+    });
+  });
+});
