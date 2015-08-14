@@ -5,35 +5,70 @@ var
 ;
 
 describe('postBridgeMessage', function () {
-  before(function postingToABridge() {
-    var regEx   = new RegExp("'\\{\"bridge\":\"[\\\\a-z'\\s]+\",\"status\":(false|true),\"timeStamp\":\"[\\w\\s\\:\\-\\(\\)]+\"\\}'", "g");
-    var aBridge = nock('http://52.26.186.75:80')
-                    .post('/incoming-snmp', regEx)
-                    .reply(200, "post received")
-                  ;
-  });
+  var aBridge = nock('http://52.26.186.75:80');
+  var timeStamp = (new Date()).toString();
+  var bridgeMessage = {
+    bridge:"bailey's bridge",
+    status:true,
+    timeStamp:timeStamp
+  };
+  var alteredMessage = {
+    bridge:"bailey's bridge",
+    status:true,
+    timeStamp:"foo"
+  };
+  var incompleteMessage = {
+    bridge:"bailey's bridge",
+    status:true,
+  };
+
+  // HTTP 200 Success
+  aBridge.post('/incoming-snmp', bridgeMessage)
+          .reply(200, "post success");
+  // HTTP 400 Errors
+  aBridge.post('/incoming-snmp', alteredMessage)
+          .reply(400, "post fail bad message");
+  aBridge.post('/incoming-snmp', incompleteMessage)
+          .reply(400, "post fail not enough message");
+  // HTTP 404 Error
+  aBridge.post('/incoming', bridgeMessage)
+          .reply(404, "wrong place, brah");
+  // HTTP 500 Error
+  aBridge.post('/incoming-snmp', { absolute: "bollocks" })
+          .reply(500, "my bad");
+  // HTTP 200 Test
   it('successfully posts to a-bridge', function (done) {
-    var timeStamp = (new Date()).toString();
-    var bridgeMessage = {
-      bridge:"bailey's bridge",
-      status:true,
-      timeStamp:timeStamp
-    };
-    postBridgeMessage(bridgeMessage, function(res, status){
-console.log(res);
+    postBridgeMessage(bridgeMessage, null, function(res, status){
       expect(status).to.equal(200);
-      expect(res).to.be.a('string');
+      done();
+    });
+  });
+  // HTTP 400 Test
+  it('errors if the message is not valid', function (done) {
+    postBridgeMessage(alteredMessage, null, function(res, status){
+      expect(status).to.equal(400);
+      done();
+    });
+  });
+  // HTTP 400 Test
+  it('errors if the message is incomplete', function (done) {
+    postBridgeMessage(incompleteMessage, null, function(res, status){
+      expect(status).to.equal(400);
+      done();
+    });
+  });
+  // HTTP 404 Test
+  it('errors if the path is incorrect', function (done) {
+    postBridgeMessage(bridgeMessage, { path: "/incoming" }, function(res, status){
+      expect(status).to.equal(404);
+      done();
+    });
+  });
+  // HTTP 500 Test
+  it('errors if the message is incomplete', function (done) {
+    postBridgeMessage({ absolute: "bollocks" }, null, function(res, status){
+      expect(status).to.equal(500);
       done();
     });
   });
 });
-(function (stuff) {
-  this._ = true;
-  console.log(this._);
-})();
-console.log(this._);
-// '\{"bridge":"[\\a-z'\s]+","status":(false|true),"timeStamp":"[\w\s\:\-\(\)]+"\}'
-
-// '\{ bridge: [\\a-z'\s]+,\\n\s+status: (false|true),\\n\s+timeStamp: [\\\w\s\:\-\(\)']+\\' \}'
-
-regEx   = new RegExp("'\\{ bridge: [\\\\a-z'\\s]+,\\\\n\\s+status: (false|true),\\\\n\\s+timeStamp: [\\\\\\w\\s\\:\\-\\(\\)']+\\\\\' \\}'", "g");

@@ -11,23 +11,25 @@ if (currentEnv === 'test') {
   };
 }
 
-module .exports = function(bridgeData, callback){
-  var successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
+module .exports = function(bridgeData, options, callback){
   bridgeData = JSON.stringify(bridgeData);
+  var successLogString;
+  if (bridgeData.bridge && bridgeData.status && bridgeData.timeStamp) {
+    successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
+  }
   var
-    options = {
-      hostname: "52.26.186.75",
-      // hostname: "127.0.0.1",
-      port: 80,
-      path: "/incoming-snmp",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Content-Length": bridgeData.length
-      }
+    headers = {
+      "Content-Type": "application/json",
+      "Content-Length": bridgeData.length
     },
     response = ''
   ;
+  if (!options) options = {};
+  options.hostname = options.hostname || "52.26.186.75";
+  options.port     = options.port     || 80;
+  options.path     = options.path     || "/incoming-snmp";
+  options.method   = options.method   || "POST";
+  options.headers  = options.headers  || headers;
 
   var req = http.request(options, function (res) {
     res.setEncoding('utf8');
