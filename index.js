@@ -3,20 +3,20 @@ var
   bunyan             = require('bunyan'),
   wlog               = require('winston'),
   fs                 = require("fs"),
-  ip                 = require('ip'),
   postBridgeMessage  = require('./modules/post-bridge-message'),
   parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage,
   getMsgOID          = require('./modules/parse-bridge-message').getMsgOID,
   oids               = require('./config/config').oids,
   port               = require('./config/config').port,
+  ip                 = require('./config/config').ip,
   currentEnv         = require('./config/config').env,
   envVars            = require('./config/config').envVars
 ;
 
 var
   options = {
-    addr: ip.address(),
-    port: port || 162,
+    addr: ip,
+    port: port,
     family: 'udp4'
   },
   log     = new bunyan({ name: 'snmpd', level: 'trace'})

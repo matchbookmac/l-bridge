@@ -1,7 +1,6 @@
 var
   http       = require('http'),
   wlog       = require('winston'),
-  ip         = require('ip'),
   aBridge    = require('../config/config').aBridge,
   currentEnv = require('../config/config').env
 ;
@@ -14,9 +13,9 @@ if (currentEnv === 'test') {
 
 module .exports = function(bridgeData, options, callback){
   bridgeData = JSON.stringify(bridgeData);
-  var successLogString;
+  var logString;
   if (bridgeData.bridge && bridgeData.status && bridgeData.timeStamp) {
-    successLogString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
+    logString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
   }
   var response = '';
 
@@ -39,7 +38,7 @@ module .exports = function(bridgeData, options, callback){
     res.on('end', function () {
       if (callback) callback(response, status);
       wlog.info("Request Status: " + status, response);
-      wlog.info(successLogString);
+      wlog.info(logString);
     });
   });
 

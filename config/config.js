@@ -1,10 +1,15 @@
 var
   env  = require('./config.json'),
+  ip   = require('ip'),
   argv = require('minimist')(process.argv.slice(2))
 ;
 
 function port() {
   return argv.p || argv.port || 162;
+}
+
+function ipAddress() {
+  return ip.address();
 }
 
 function environment() {
@@ -41,6 +46,7 @@ function aBridge() {
 
 module .exports = {
   port:    port(),
+  ip:      ipAddress(),
   env:     environment(),
   envVars: envVars(),
   oids:    oids(),
