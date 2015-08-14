@@ -52,7 +52,6 @@ trapd.on('trap',function(msg) {
     var
       client = snmp.createClient({ log: log }),
       agentAddress = msg.src.address,
-      // "172.20.15.236",
       community = "bridgestat"
     ;
 

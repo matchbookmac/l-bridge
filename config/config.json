@@ -22,6 +22,9 @@
       "Content-Length": 1
     }
   },
+  "sentinel": {
+    "ip": "172.20.15.236"
+  },
   "development": {
     "foo": "bar"
   },
