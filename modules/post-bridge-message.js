@@ -5,11 +5,11 @@ var
   currentEnv = require('../config/config').env
 ;
 
-function silenceOnTest(args) {
-  return;
-}
+
 if (currentEnv === 'test') {
-  process.stderr.write = wlog.info = silenceOnTest;
+  process.stderr.write = wlog.info = function silenceOnTest(args) {
+    return;
+  };
 }
 
 module .exports = function(bridgeData, callback){
