@@ -40,8 +40,23 @@ function oids() {
   return env.oids;
 }
 
+function bridges() {
+  var
+    bridgeNames = {},
+    bridgeOids  = oids().bridges
+  ;
+  for (var oid in bridgeOids) {
+    if (bridgeOids.hasOwnProperty(oid)) {
+      bridgeNames[bridgeOids[oid]] = oid;
+    }
+  }
+  return bridgeNames;
+}
+
 function aBridge() {
-  return env.aBridge;
+  var tmpABridge = env.aBridge;
+  if (environment() === 'test') tmpABridge.hostname = ip.address();
+  return tmpABridge;
 }
 
 function sentinel() {
@@ -54,6 +69,7 @@ module .exports = {
   env:      environment(),
   envVars:  envVars(),
   oids:     oids(),
+  bridges:  bridges(),
   aBridge:  aBridge(),
   sentinel: sentinel()
 };

@@ -1,9 +1,10 @@
 var
   http       = require('http'),
   wlog       = require('winston'),
+  snmp       = require('snmpjs'),
   aBridge    = require('../config/config').aBridge,
-  oids       = require('../config/config').oids,
-  aBridge    = require('../config/config').sentinel,
+  bridges    = require('../config/config').bridges,
+  sentinel   = require('../config/config').sentinel,
   currentEnv = require('../config/config').env
 ;
 
@@ -14,7 +15,7 @@ if (currentEnv === 'test') {
 }
 
 function twoHundred(bridgeData, callback){
-  callback();
+  callback(200);
 }
 
 function fourHundred(bridgeData, callback){
@@ -28,20 +29,24 @@ function fourHundred(bridgeData, callback){
     wlog.info('400 error, bridge timestamp not set for' + bridgeData);
   }
   var
-    client = snmp.createClient({ log: log }),
+    client = snmp.createClient(),
     snmpResponse
   ;
 
   if (bridgeData.bridge) {
-    client.get(sentinel.ip, sentinel.community, 0, oids.bridges[bridgeData.bridge], snmpResponse = getSNMPCallback);
+    client.get(sentinel.ip, sentinel.community, 0, bridges[bridgeData.bridge], function (snmpmsg) {
+      snmpResponse = getSNMPCallback(snmpmsg);
+    });
   } else {
     for (var oid in oids.bridges) {
       if (oids.bridges.hasOwnProperty(oid)) {
-        client.get(agentAddress, sentinel.community, 0, oid, snmpResponse = getSNMPCallback);
+        client.get(agentAddress, sentinel.community, 0, oid, function (snmpmsg) {
+          snmpResponse = getSNMPCallback(snmpmsg);
+        });
       }
     }
   }
-  callback(status);
+  callback(snmpResponse);
 }
 
 function fourZeroFour(bridgeData, callback){
@@ -73,15 +78,12 @@ function getSNMPCallback(snmpmsg) {
     }
     retryStatus = status;
   });
-  // TODO You were here bottom of callback stack
-  return {
-    retryStatus: retryStatus,
-    message: bridgeMessage
-  };
+  return retryStatus;
 }
 
 module .exports = function handlePostResponse(status, bridgeMessage, callback) {
   postStatus = status.toString();
   var that = this;
+  // TODO Something weird with this callback
   postResponses[postStatus].call(that, bridgeMessage, callback);
 };

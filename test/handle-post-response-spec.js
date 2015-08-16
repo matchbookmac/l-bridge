@@ -1,12 +1,19 @@
 var
-  expect            = require('chai').expect,
-  nock              = require('nock'),
-  aBridgeConf       = require('../config/config').aBridge,
-  postBridgeMessage = require('../modules/post-bridge-message'),
-  handlePostResponse = require('../modules/handle-post-response')
+  expect             = require('chai').expect,
+  nock               = require('nock'),
+  aBridgeConf        = require('../config/config').aBridge,
+  postBridgeMessage  = require('../modules/post-bridge-message'),
+  handlePostResponse = require('../modules/handle-post-response'),
+  sentinel           = require('../modules/mock-sentinel')
 ;
 
 describe('postBridgeMessage', function () {
+  var mockSentinel;
+  before(function createAMockSentinel(done) {
+    mockSentinel = sentinel.simulate();
+    done();
+  });
+
   var aBridge = nock('http://' + aBridgeConf.hostname + ':' + aBridgeConf.port);
   var timeStamp = (new Date()).toString();
   var bridgeMessage = {
@@ -44,7 +51,8 @@ describe('postBridgeMessage', function () {
     var postStatus;
     postBridgeMessage(bridgeMessage, null, function(res, status){
       handlePostResponse(status, bridgeMessage, function (status) {
-        // Decinding what to do here
+        expect(status).to.equal(200);
+        done();
       });
     });
   });
@@ -52,7 +60,10 @@ describe('postBridgeMessage', function () {
   it('errors if the message is not valid', function (done) {
     postBridgeMessage(alteredMessage, null, function(res, status){
       expect(status).to.equal(400);
-      done();
+      handlePostResponse(status, bridgeMessage, function (status) {
+        expect(status).to.equal(200);
+        done();
+      });
     });
   });
   // HTTP 400 Test
@@ -75,5 +86,10 @@ describe('postBridgeMessage', function () {
       expect(status).to.equal(500);
       done();
     });
+  });
+
+  after(function shutDownMockSentinel(done) {
+    mockSentinel.close();
+    done();
   });
 });
