@@ -6,10 +6,12 @@ var
   postBridgeMessage  = require('./modules/post-bridge-message'),
   parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage,
   getMsgOID          = require('./modules/parse-bridge-message').getMsgOID,
+  getSNMPCallback    = require('./modules/get-snmp-callback'),
   oids               = require('./config/config').oids,
   port               = require('./config/config').port,
   ip                 = require('./config/config').ip,
   currentEnv         = require('./config/config').env,
+  sentinel           = require('./config/config').sentinel,
   envVars            = require('./config/config').envVars
 ;
 
@@ -51,20 +53,13 @@ trapd.on('trap',function(msg) {
     wlog.info("Sentinel restart");
     var
       client = snmp.createClient({ log: log }),
-      agentAddress = msg.src.address,
-      community = "bridgestat"
+      agentAddress = msg.src.address
     ;
 
     for (var oid in oids.bridges) {
       if (oids.bridges.hasOwnProperty(oid)) {
-        client.get(agentAddress, community, 0, oid, getSNMPCallback);
+        client.get(agentAddress, sentinel.community, 0, oid, getSNMPCallback);
       }
     }
   }
 });
-
-function getSNMPCallback(snmpmsg) {
-  var timeStamp = (new Date()).toString();
-  var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
-  postBridgeMessage(bridgeMessage);
-}

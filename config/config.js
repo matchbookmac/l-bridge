@@ -44,11 +44,16 @@ function aBridge() {
   return env.aBridge;
 }
 
+function sentinel() {
+  return env.sentinel;
+}
+
 module .exports = {
-  port:    port(),
-  ip:      ipAddress(),
-  env:     environment(),
-  envVars: envVars(),
-  oids:    oids(),
-  aBridge: aBridge()
+  port:     port(),
+  ip:       ipAddress(),
+  env:      environment(),
+  envVars:  envVars(),
+  oids:     oids(),
+  aBridge:  aBridge(),
+  sentinel: sentinel()
 };

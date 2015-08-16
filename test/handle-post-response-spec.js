@@ -43,10 +43,8 @@ describe('postBridgeMessage', function () {
   it('successfully posts to a-bridge', function (done) {
     var postStatus;
     postBridgeMessage(bridgeMessage, null, function(res, status){
-      postStatus = status.toString();
-      var that = this;
-      handlePostResponse[postStatus].call(that, bridgeMessage, function () {
-        done();
+      handlePostResponse(status, bridgeMessage, function (status) {
+        // Decinding what to do here
       });
     });
   });

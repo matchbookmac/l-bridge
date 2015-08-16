@@ -23,7 +23,8 @@
     }
   },
   "sentinel": {
-    "ip": "172.20.15.236"
+    "ip": "172.20.15.236",
+    "community": "bridgestat"
   },
   "development": {
     "foo": "bar"
