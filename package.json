@@ -23,6 +23,7 @@
     "moment": "2.10.6",
     "mysql": "2.8.0",
     "path": "^0.11.14",
+    "retry": "^0.6.1",
     "snmpjs": "file:./node-snmpjs",
     "util": "^0.10.3",
     "winston": "1.0.1"

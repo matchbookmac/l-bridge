@@ -5,11 +5,11 @@ var
   currentEnv = require('../config/config').env
 ;
 
-// if (currentEnv === 'test') {
-//   process.stderr.write = wlog.info = function silenceOnTest(args) {
-//     return;
-//   };
-// }
+if (currentEnv === 'test') {
+  process.stderr.write = wlog.info = function silenceOnTest(args) {
+    return;
+  };
+}
 
 module .exports = function(bridgeData, options, callback){
   var logString;
@@ -36,14 +36,15 @@ module .exports = function(bridgeData, options, callback){
     });
 
     res.on('end', function () {
-      if (callback) return callback(response, status);
+      if (callback) return callback(null, response, status);
       wlog.info("Request Status: " + status, response);
       if (logString) wlog.info(logString);
     });
   });
 
   req.on("error", function (err) {
-    if (callback) return callback(err.message, err);
+console.log(err);
+    if (callback) return callback(err, err.message, err.code);
   });
 
   req.write(bridgeData);

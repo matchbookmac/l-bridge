@@ -16,7 +16,7 @@ describe('postBridgeMessage', function () {
     var aBridge = nock('http://' + aBridgeConf.hostname + ':' + aBridgeConf.port)
                     .post(aBridgeConf.path, bridgeMessage)
                     .reply(200, "post success");
-    postBridgeMessage(bridgeMessage, null, function(res, status){
+    postBridgeMessage(bridgeMessage, null, function(err, res, status){
       expect(status).to.equal(200);
       done();
     });

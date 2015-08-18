@@ -1,5 +1,6 @@
 var
   env  = require('./config.json'),
+  wlog = require('winston'),
   ip   = require('ip'),
   argv = require('minimist')(process.argv.slice(2))
 ;

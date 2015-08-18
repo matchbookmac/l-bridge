@@ -2,6 +2,7 @@ var
   http               = require('http'),
   wlog               = require('winston'),
   util               = require('util'),
+  retry              = require('retry'),
   snmp               = require('snmpjs'),
   postBridgeMessage  = require('./post-bridge-message'),
   parseBridgeMessage = require('./parse-bridge-message').parseBridgeMessage,
@@ -11,14 +12,14 @@ var
   currentEnv         = require('../config/config').env
 ;
 
-// if (currentEnv === 'test') {
-//   process.stderr.write = wlog.info = function silenceOnTest(args) {
-//     return;
-//   };
-// }
+if (currentEnv === 'test') {
+  process.stderr.write = wlog.info = function silenceOnTest(args) {
+    return;
+  };
+}
 
 function twoHundred(bridgeData, callback){
-  callback(200);
+  callback(null, 200);
 }
 
 function fourHundred(bridgeData, callback){
@@ -59,17 +60,29 @@ function fourHundred(bridgeData, callback){
 }
 
 function fourZeroFour(bridgeData, callback){
-  postBridgeMessage(bridgeData, aBridge, function (res, status) {
-    postRequestRetryCallback(res, status, bridgeData, callback);
+  postBridgeMessage(bridgeData, aBridge, function (err, res, status) {
+    postRequestRetryCallback(err ,res, status, bridgeData, callback);
   });
 }
 
 function fiveHundred(bridgeData, callback){
-  setTimeout(function () {
-    postBridgeMessage(bridgeData, aBridge, function (res, status) {
-      postRequestRetryCallback(res, status, bridgeData, callback);
+  var operation = retry.operation({ retries: 5 });
+
+  operation.attempt(function () {
+    postBridgeMessage(bridgeData, aBridge, function (err, res, status) {
+      if (status === 200) {
+        wlog.info('Retry for:\n' + util.inspect(bridgeData) + '\nsuccessful');
+        return callback(null, status);
+      } else if (postResponses[status.toString()] && status != 500) {
+        handlePostResponse(status, bridgeData, callback);
+      } else {
+        if (operation.retry({ err: err, response: res })) {
+          return;
+        }
+        callback(operation.mainError(), status);
+      }
     });
-  },2000);
+  });
 }
 
 function getSNMPCallback(snmpmsg, callback) {
@@ -78,19 +91,25 @@ function getSNMPCallback(snmpmsg, callback) {
     retryStatus
   ;
   var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
-  postBridgeMessage(bridgeMessage, null, function (res, status) {
-    postRequestRetryCallback(res, status, bridgeMessage, callback);
+  postBridgeMessage(bridgeMessage, null, function (err, res, status) {
+    postRequestRetryCallback(err, res, status, bridgeMessage, callback);
   });
 }
 
-function postRequestRetryCallback(res, status, message, callback) {
+function postRequestRetryCallback(err, res, status, message, callback) {
   if (status === 200) {
     wlog.info('Retry for:\n' + util.inspect(message) + '\nsuccessful');
-    return callback(status);
+    return callback(null, status);
   } else if (postResponses[status.toString()]) {
     wlog.info('Retry for:\n' + util.inspect(message) + '\nunsucessful with HTTP error: ' + status);
-    return callback(status);
+    return callback(err, status);
   }
+}
+
+function handlePostResponse(status, bridgeMessage, callback) {
+  postStatus = status.toString();
+  var that = this;
+  postResponses[postStatus].call(that, bridgeMessage, callback);
 }
 
 var postResponses = {
@@ -100,9 +119,4 @@ var postResponses = {
   "500": fiveHundred
 };
 
-module .exports = function handlePostResponse(status, bridgeMessage, callback) {
-  postStatus = status.toString();
-  var that = this;
-  // TODO Something weird with this callback
-  postResponses[postStatus].call(that, bridgeMessage, callback);
-};
+module .exports = handlePostResponse;
