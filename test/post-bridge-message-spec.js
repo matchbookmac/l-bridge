@@ -6,19 +6,23 @@ var
 ;
 
 describe('postBridgeMessage', function () {
-  var aBridge = nock('http://' + aBridgeConf.hostname + ':' + aBridgeConf.port)
-                  .post(aBridgeConf.path, bridgeMessage)
-                  .reply(200, "post success");
-  var timeStamp = (new Date()).toString();
-  var bridgeMessage = {
-    bridge:"bailey's bridge",
-    status:true,
-    timeStamp:timeStamp
-  };
   it('successfully posts to a-bridge', function (done) {
+    var timeStamp = (new Date()).toString();
+    var bridgeMessage = {
+      bridge:"bailey's bridge",
+      status:true,
+      timeStamp:timeStamp
+    };
+    var aBridge = nock('http://' + aBridgeConf.hostname + ':' + aBridgeConf.port)
+                    .post(aBridgeConf.path, bridgeMessage)
+                    .reply(200, "post success");
     postBridgeMessage(bridgeMessage, null, function(res, status){
       expect(status).to.equal(200);
       done();
     });
+  });
+  after(function clearNock(done) {
+    nock.cleanAll();
+    done();
   });
 });

@@ -5,18 +5,18 @@ var
   currentEnv = require('../config/config').env
 ;
 
-if (currentEnv === 'test') {
-  process.stderr.write = wlog.info = function silenceOnTest(args) {
-    return;
-  };
-}
+// if (currentEnv === 'test') {
+//   process.stderr.write = wlog.info = function silenceOnTest(args) {
+//     return;
+//   };
+// }
 
 module .exports = function(bridgeData, options, callback){
-  bridgeData = JSON.stringify(bridgeData);
   var logString;
-  if (bridgeData.bridge && bridgeData.status && bridgeData.timeStamp) {
+  if (bridgeData.bridge && (typeof bridgeData.status != 'undefined') && bridgeData.timeStamp) {
     logString = bridgeData.bridge.toString() + " status changed to " + bridgeData.status.toString() + " at " + bridgeData.timeStamp.toString();
   }
+  bridgeData = JSON.stringify(bridgeData);
   var response = '';
 
   if (!options) options = {};
@@ -36,14 +36,14 @@ module .exports = function(bridgeData, options, callback){
     });
 
     res.on('end', function () {
-      if (callback) callback(response, status);
+      if (callback) return callback(response, status);
       wlog.info("Request Status: " + status, response);
-      wlog.info(logString);
+      if (logString) wlog.info(logString);
     });
   });
 
   req.on("error", function (err) {
-    if (callback) callback(err.message, null);
+    if (callback) return callback(err.message, err);
   });
 
   req.write(bridgeData);

@@ -7,7 +7,7 @@ var
   sentinel           = require('../modules/mock-sentinel')
 ;
 
-describe('postBridgeMessage', function () {
+describe('handlePostResponse', function () {
   var mockSentinel;
   before(function createAMockSentinel(done) {
     mockSentinel = sentinel.simulate();
@@ -32,7 +32,8 @@ describe('postBridgeMessage', function () {
   };
 
   // HTTP 200 Success
-  aBridge.post(aBridgeConf.path, bridgeMessage)
+  aBridge.persist()
+          .post(aBridgeConf.path, bridgeMessage)
           .reply(200, "post success");
   // HTTP 400 Errors
   aBridge.post(aBridgeConf.path, alteredMessage)
@@ -43,7 +44,7 @@ describe('postBridgeMessage', function () {
   aBridge.post('/incoming', bridgeMessage)
           .reply(404, "wrong place, brah");
   // HTTP 500 Error
-  aBridge.post(aBridgeConf.path, { absolute: "bollocks" })
+  aBridge.post("/500-error", bridgeMessage)
           .reply(500, "my bad");
 
   // HTTP 200 Test
@@ -70,26 +71,36 @@ describe('postBridgeMessage', function () {
   it('errors if the message is incomplete', function (done) {
     postBridgeMessage(incompleteMessage, null, function(res, status){
       expect(status).to.equal(400);
-      done();
+      handlePostResponse(status, bridgeMessage, function (status) {
+        expect(status).to.equal(200);
+        done();
+      });
     });
   });
   // HTTP 404 Test
   it('errors if the path is incorrect', function (done) {
     postBridgeMessage(bridgeMessage, { path: "/incoming" }, function(res, status){
       expect(status).to.equal(404);
-      done();
+      handlePostResponse(status, bridgeMessage, function (status) {
+        expect(status).to.equal(200);
+        done();
+      });
     });
   });
   // HTTP 500 Test
-  it('errors if the message is incomplete', function (done) {
-    postBridgeMessage({ absolute: "bollocks" }, null, function(res, status){
+  it('errors if aBridge is having a problem', function (done) {
+    postBridgeMessage(bridgeMessage, { path: "/500-error"}, function(res, status){
       expect(status).to.equal(500);
-      done();
+      handlePostResponse(status, bridgeMessage, function (status) {
+        expect(status).to.equal(200);
+        done();
+      });
     });
   });
 
   after(function shutDownMockSentinel(done) {
     mockSentinel.close();
+    nock.cleanAll();
     done();
   });
 });

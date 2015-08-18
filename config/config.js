@@ -60,7 +60,12 @@ function aBridge() {
 }
 
 function sentinel() {
-  return env.sentinel;
+  var tmpSentinel = env.sentinel;
+  if (environment() === 'test') {
+    tmpSentinel.ip = ip.address();
+    tmpSentinel.community = "public";
+  }
+  return tmpSentinel;
 }
 
 module .exports = {

@@ -60,4 +60,8 @@ Extraneous options with `-` or `--` that are not listed above will be ignored.
   When deploying on server, where do we want to store the code?
   When running on the server, how do we want to do that? daemon? root (ick)?
   Do we want the code on the server to follow master in beanstalk with a webhook?
+
+  Code for error checking for http connection refused error
+  server.on('error', function (e) {
+  if (e.code == 'EADDRINUSE') {
 -->
