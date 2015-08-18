@@ -4,12 +4,12 @@ var
   aBridge    = require('../config/config').aBridge,
   currentEnv = require('../config/config').env
 ;
-
-if (currentEnv === 'test') {
-  process.stderr.write = wlog.info = function silenceOnTest(args) {
-    return;
-  };
-}
+// 
+// if (currentEnv === 'test') {
+//   process.stderr.write = wlog.info = function silenceOnTest(args) {
+//     return;
+//   };
+// }
 
 module .exports = function(bridgeData, options, callback){
   var logString;
