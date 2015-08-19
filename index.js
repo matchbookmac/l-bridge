@@ -2,11 +2,12 @@ var
   snmp               = require('snmpjs'),
   bunyan             = require('bunyan'),
   wlog               = require('winston'),
-  fs                 = require("fs"),
+  fs                 = require('fs'),
+  util               = require('util'),
   postBridgeMessage  = require('./modules/post-bridge-message'),
   parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage,
+  handlePostResponse = require('./modules/handle-post-response'),
   getMsgOID          = require('./modules/parse-bridge-message').getMsgOID,
-  getSNMPCallback    = require('./modules/get-snmp-callback'),
   oids               = require('./config/config').oids,
   port               = require('./config/config').port,
   ip                 = require('./config/config').ip,
@@ -26,10 +27,20 @@ var
 
 if (currentEnv !== 'test') {
   wlog.add(wlog.transports.File, {
-    filename: 'logs/winstonlog.log',
+    name: 'info-file',
+    filename: 'logs/info-log.log',
     timestamp: function () {
       return (new Date()).toString();
-    }
+    },
+    level: 'info'
+  });
+  wlog.add(wlog.transports.File, {
+    name: 'error-file',
+    filename: 'logs/error-log.log',
+    timestamp: function () {
+      return (new Date()).toString();
+    },
+    level: 'error'
   });
 } else {
   wlog.info = function silenceOnTest(args) {
@@ -48,7 +59,11 @@ trapd.on('trap',function(msg) {
   ;
   if (msgOID && (oids.sentinel[msgOID] != "Sentinel 16 is up")) {
     var bridgeMessage = parseBridgeMessage(msg, timeStamp);
-    postBridgeMessage(bridgeMessage);
+    postBridgeMessage(bridgeMessage, null, function (err, res, status) {
+      handlePostResponse(status, bridgeMessage, function (err, status) {
+        if (err) wlog.error("Error posting\n" + util.inspect(bridgeMessage) + ":\n" + err + "\n Status: " + status);
+      });
+    });
   } else {
     wlog.info("Sentinel restart");
     var
@@ -63,3 +78,13 @@ trapd.on('trap',function(msg) {
     }
   }
 });
+
+function getSNMPCallback(snmpmsg) {
+  var timeStamp = (new Date()).toString();
+  var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
+  postBridgeMessage(bridgeMessage, null, function (err, res, status) {
+    handlePostResponse(status, bridgeMessage, function (err, status) {
+      if (err) wlog.error("Error posting\n" + bridgeMessage + ":\n" + err + "\n Status: " + status + "\nAfter Sentinel Restart");
+    });
+  });
+}

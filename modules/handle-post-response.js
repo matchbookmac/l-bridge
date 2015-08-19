@@ -24,13 +24,13 @@ function twoHundred(bridgeData, callback){
 
 function fourHundred(bridgeData, callback){
   if (typeof bridgeData.bridge === 'undefined') {
-    wlog.info('400 error, bridge name not set for' + bridgeData);
+    wlog.error('400 error, bridge name not set for' + bridgeData);
   }
   if (typeof bridgeData.status === 'undefined') {
-    wlog.info('400 error, bridge status not set for' + bridgeData);
+    wlog.error('400 error, bridge status not set for' + bridgeData);
   }
   if (typeof bridgeData.timeStamp === 'undefined') {
-    wlog.info('400 error, bridge timestamp not set for' + bridgeData);
+    wlog.error('400 error, bridge timestamp not set for' + bridgeData);
   }
   var
     client = snmp.createClient(),
@@ -109,7 +109,7 @@ function postRequestRetryCallback(err, res, status, message, callback) {
     wlog.info('Retry for:\n' + util.inspect(message) + '\nsuccessful');
     return callback(null, status);
   } else if (postResponses[status.toString()]) {
-    wlog.info('Retry for:\n' + util.inspect(message) + '\nunsucessful with HTTP error: ' + status);
+    wlog.error('Retry for:\n' + util.inspect(message) + '\nunsucessful with HTTP error: ' + status);
     return callback(err, status);
   }
 }
@@ -117,7 +117,11 @@ function postRequestRetryCallback(err, res, status, message, callback) {
 function handlePostResponse(status, bridgeMessage, callback) {
   postStatus = status.toString();
   var that = this;
-  postResponses[postStatus].call(that, bridgeMessage, callback);
+  if (postResponses[postStatus]) {
+    postResponses[postStatus].call(that, bridgeMessage, callback);
+  } else {
+    wlog.error('Unknown Response Status: ' + status + ', Unsure how to handle');
+  }
 }
 
 var postResponses = {
