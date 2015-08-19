@@ -28,6 +28,11 @@ npm start
 ```console
 npm test
 ```
+*Please Note*
+The http error handling module uses an exponential backoff to respond to
+ECONNREFUSED and 500 errors. Testing this does require the suite to wait for
+the backoff cycle to complete. As such, it is not unusual for the test suite
+to take ~ 45 s.
 
 ####To send a test trap for a bridge:
 

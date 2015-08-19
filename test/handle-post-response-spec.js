@@ -118,7 +118,7 @@ describe('handlePostResponse', function () {
   it('does an exponential backoff then succeeds if aBridge is having a problem', function (done) {
     this.timeout(45000);
     aBridge.post(aBridgeConf.path, bridgeMessage)
-            .times(4)
+            .times(3)
             .reply(500, "my bad");
     aBridge.post(aBridgeConf.path, bridgeMessage)
             .reply(200, "post success");
@@ -126,6 +126,60 @@ describe('handlePostResponse', function () {
       expect(status).to.equal(500);
       handlePostResponse(status, bridgeMessage, function (err, status) {
         expect(status).to.equal(200);
+        done();
+      });
+    });
+  });
+  it('does an exponential backoff then fails after 5 trys if aBridge is having a problem', function (done) {
+    this.timeout(45000);
+    aBridge.post(aBridgeConf.path, bridgeMessage)
+            .times(6)
+            .reply(500, "my bad");
+    postBridgeMessage(bridgeMessage, null, function(err, res, status){
+      expect(status).to.equal(500);
+      handlePostResponse(status, bridgeMessage, function (err, status) {
+        expect(status).to.equal(500);
+        done();
+      });
+    });
+  });
+  // ECONNREFUSED tests
+  it('does an exponential backoff then succeeds if connection is refused', function (done) {
+    this.timeout(45000);
+    var connectionError = {
+      message: 'connect ECONNREFUSED',
+      code: 'ECONNREFUSED',
+      errno: 'ECONNREFUSED',
+      syscall: 'connect'
+    };
+    aBridge.post(aBridgeConf.path, bridgeMessage)
+            .times(3)
+            .replyWithError(connectionError);
+    aBridge.post(aBridgeConf.path, bridgeMessage)
+            .reply(200, "post success");
+    postBridgeMessage(bridgeMessage, null, function(err, res, status){
+      expect(status).to.equal('ECONNREFUSED');
+      handlePostResponse(status, bridgeMessage, function (err, status) {
+        expect(status).to.equal(200);
+        done();
+      });
+    });
+  });
+  it('does an exponential backoff then fails if connection is refused continually', function (done) {
+    this.timeout(45000);
+    var connectionError = {
+      message: 'connect ECONNREFUSED',
+      code: 'ECONNREFUSED',
+      errno: 'ECONNREFUSED',
+      syscall: 'connect'
+    };
+    aBridge.post(aBridgeConf.path, bridgeMessage)
+            .times(6)
+            .replyWithError(connectionError);
+    postBridgeMessage(bridgeMessage, null, function(err, res, status){
+      expect(status).to.equal('ECONNREFUSED');
+      handlePostResponse(status, bridgeMessage, function (err, status) {
+        expect(status).to.equal('ECONNREFUSED');
         done();
       });
     });

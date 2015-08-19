@@ -66,14 +66,22 @@ function fourZeroFour(bridgeData, callback){
 }
 
 function fiveHundred(bridgeData, callback){
-  var operation = retry.operation({ retries: 5 });
+  exponentialRetry(bridgeData, callback);
+}
+
+function connectionRefused(bridgeData, callback){
+  exponentialRetry(bridgeData, callback);
+}
+
+function exponentialRetry(bridgeData, callback) {
+  var operation = retry.operation({ retries: 4 });
 
   operation.attempt(function () {
     postBridgeMessage(bridgeData, aBridge, function (err, res, status) {
       if (status === 200) {
         wlog.info('Retry for:\n' + util.inspect(bridgeData) + '\nsuccessful');
         return callback(null, status);
-      } else if (postResponses[status.toString()] && status != 500) {
+      } else if (postResponses[status.toString()] && status != 500 && status != "ECONNREFUSED") {
         handlePostResponse(status, bridgeData, callback);
       } else {
         if (operation.retry({ err: err, response: res })) {
@@ -116,7 +124,8 @@ var postResponses = {
   "200": twoHundred,
   "400": fourHundred,
   "404": fourZeroFour,
-  "500": fiveHundred
+  "500": fiveHundred,
+  "ECONNREFUSED": connectionRefused
 };
 
 module .exports = handlePostResponse;

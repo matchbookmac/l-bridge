@@ -43,7 +43,6 @@ module .exports = function(bridgeData, options, callback){
   });
 
   req.on("error", function (err) {
-console.log(err);
     if (callback) return callback(err, err.message, err.code);
   });
 
