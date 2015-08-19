@@ -43,7 +43,7 @@ trapd.on('trap',function(msg) {
       });
     });
   } else {
-    wlog.info("Sentinel restart");
+    wlog.warn("Sentinel restart");
     var
       client = snmp.createClient({ log: log }),
       agentAddress = msg.src.address
