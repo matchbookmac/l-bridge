@@ -1,16 +1,23 @@
 var
-  bunyan = require('bunyan'),
-  snmp   = require('snmpjs'),
-  mibs   = require('../config/mibs')
+  bunyan     = require('bunyan'),
+  snmp       = require('snmpjs'),
+  mibs       = require('../config/mibs'),
+  currentEnv = require('../config/config').env,
+  log
 ;
 
+if (currentEnv === 'test') {
+  log = require('./test-logger');
+} else {
+  log = new bunyan({ name: 'snmpd', level: 'trace'});
+}
 
 function Sentinel() {}
 
 Sentinel.prototype.sendTrap = function sendTrap(options){
   var ip = require('ip');
   var
-    client    = snmp.createClient({}),
+    client    = snmp.createClient({ log: log }),
     ipAddr    = options.ip || ip.address(),
     // '172.20.198.7', l-bridge
     community = options.community || 'public',
@@ -36,10 +43,9 @@ Sentinel.prototype.sendTrap = function sendTrap(options){
 };
 
 Sentinel.prototype.simulate = function simulate() {
-  var log, agent;
+  var agent;
 
-  log = new bunyan({ name: 'snmpd', level: 'trace'});
-  agent = snmp.createAgent();
+  agent = snmp.createAgent({ log: log });
   agent.request(mibs);
   agent.bind({ family: 'udp4', port: 161 });
   return agent;

@@ -11,15 +11,12 @@ var
   sentinel           = require('../config/config').sentinel,
   currentEnv         = require('../config/config').env
 ;
-//
-// if (currentEnv === 'test') {
-//   process.stderr.write = wlog.info = function silenceOnTest(args) {
-//     return;
-//   };
-// }
 
-// If you want to silence the log, try passing it your own that responds to:
-// log.child, log.info
+if (currentEnv === 'test') {
+  wlog.info = function silenceOnTest(args) {
+    return;
+  };
+}
 
 function twoHundred(bridgeData, callback){
   callback(null, 200);
