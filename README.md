@@ -34,6 +34,12 @@ ECONNREFUSED and 500 errors. Testing this does require the suite to wait for
 the backoff cycle to complete. As such, it is not unusual for the test suite
 to take ~ 45 s.
 
+*Also*
+When testing, wlog.info is overwritten so that the test output is silent
+except for the mocha reporter. If tests are failing and you don't know why,
+comment out the lines in post-bridge-message and handle-post-response that
+overwrite that function.
+
 ####To send a test trap for a bridge:
 
 *Bridge Up*
@@ -65,8 +71,4 @@ Extraneous options with `-` or `--` that are not listed above will be ignored.
   When deploying on server, where do we want to store the code?
   When running on the server, how do we want to do that? daemon? root (ick)?
   Do we want the code on the server to follow master in beanstalk with a webhook?
-
-  Code for error checking for http connection refused error
-  server.on('error', function (e) {
-  if (e.code == 'EADDRINUSE') {
 -->
