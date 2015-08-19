@@ -1,3 +1,4 @@
+require('../config/logging');
 var
   expect            = require('chai').expect,
   nock              = require('nock'),

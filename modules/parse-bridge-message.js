@@ -1,5 +1,5 @@
 var
-  oids        = require('../config/config').oids
+  oids = require('../config/config').oids
 ;
 
 function findVarbind(snmpmsg) {

@@ -12,12 +12,6 @@ var
   currentEnv         = require('../config/config').env
 ;
 
-if (currentEnv === 'test') {
-  wlog.info = function silenceOnTest(args) {
-    return;
-  };
-}
-
 function twoHundred(bridgeData, callback){
   callback(null, 200);
 }

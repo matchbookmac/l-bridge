@@ -1,3 +1,4 @@
+require('./config/logging');
 var
   snmp               = require('snmpjs'),
   bunyan             = require('bunyan'),
@@ -22,31 +23,8 @@ var
     port: port,
     family: 'udp4'
   },
-  log     = new bunyan({ name: 'snmpd', level: 'trace'})
+  log = new bunyan({ name: 'snmpd', level: 'trace'})
 ;
-
-if (currentEnv !== 'test') {
-  wlog.add(wlog.transports.File, {
-    name: 'info-file',
-    filename: 'logs/info-log.log',
-    timestamp: function () {
-      return (new Date()).toString();
-    },
-    level: 'info'
-  });
-  wlog.add(wlog.transports.File, {
-    name: 'error-file',
-    filename: 'logs/error-log.log',
-    timestamp: function () {
-      return (new Date()).toString();
-    },
-    level: 'error'
-  });
-} else {
-  wlog.info = function silenceOnTest(args) {
-    return;
-  };
-}
 
 var trapd = snmp.createTrapListener({ log: log });
 trapd.bind(options);
