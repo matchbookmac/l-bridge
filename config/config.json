@@ -15,11 +15,12 @@
   "aBridge": {
     "hostname": "52.26.186.75",
     "port": 80,
-    "path": "/incoming-snmp",
+    "path": "/bridges/events/actual",
     "method": "POST",
     "headers": {
       "Content-Type": "application/json",
-      "Content-Length": 1
+      "Content-Length": 1,
+      "Authorization": "Bearer 1234"
     }
   },
   "sentinel": {
