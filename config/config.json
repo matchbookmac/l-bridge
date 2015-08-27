@@ -27,6 +27,12 @@
     "ip": "172.20.15.236",
     "community": "bridgestat"
   },
+  "slack": {
+    "url": "https://hooks.slack.com/services/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",
+    "channel": "#bridgeapp",
+    "username": "l-bridge",
+    "icon_emoji": ":rotating_light:"
+  },
   "development": {
     "foo": "bar"
   },

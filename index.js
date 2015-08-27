@@ -6,6 +6,7 @@ var
   fs                 = require('fs'),
   util               = require('util'),
   postBridgeMessage  = require('./modules/post-bridge-message'),
+  postToSlack        = require('./modules/post-to-slack'),
   parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage,
   handlePostResponse = require('./modules/handle-post-response'),
   getMsgOID          = require('./modules/parse-bridge-message').getMsgOID,
@@ -42,6 +43,7 @@ trapd.on('trap',function(msg) {
         if (err) wlog.error("Error posting\n" + util.inspect(bridgeMessage) + ":\n" + err + "\n Status: " + status);
       });
     });
+    postToSlack(bridgeMessage);
   } else {
     wlog.warn("Sentinel restart");
     var

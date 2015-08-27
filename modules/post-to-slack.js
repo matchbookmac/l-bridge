@@ -1,18 +1,24 @@
 var request = require('request');
+var currentEnv = require('../config/config').env;
+var slack = require('../config/config.json').slack;
 
-var url = "https://hooks.slack.com/services/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";
-var slackMsg = {
-  channel: "#bridge-test",
-  username: "l-bridge",
-  text: "This is posted to #bridge-test and comes from a bot named bridgeapp.",
-  icon_emoji: ":rotating_light:"
-};
-
-var req = request.post(url, {
-  form: {
-    payload: JSON.stringify(slackMsg)
+module.exports = function (bridgeData) {
+  if (currentEnv !== 'test') {
+    var bridgeState = bridgeData.status ? " is starting to lift" : " has reopened";
+    var slackText = bridgeData.bridge + bridgeState;
+    var slackMsg = {
+      channel: slack.channel,
+      username: slack.username,
+      text: slackText,
+      icon_emoji: slack.icon_emoji
+    };
+    request.post(slack.url, {
+      form: {
+        payload: JSON.stringify(slackMsg)
+      }
+    }, function (err, response) {
+        if (err) return wlog.error(err);
+        if (response.body !== 'ok') return wlog.error(response.body);
+    });
   }
-}, function (err, response) {
-    if (err) return console.error(err);
-    if (response.body !== 'ok') return console.error(response.body);
-});
+};
