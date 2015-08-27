@@ -1,9 +1,8 @@
-var
-  env  = require('./config.json'),
-  wlog = require('winston'),
-  ip   = require('ip'),
-  argv = require('minimist')(process.argv.slice(2))
-;
+
+var env  = require('./config.json');
+var wlog = require('winston');
+var ip   = require('ip');
+var argv = require('minimist')(process.argv.slice(2));
 
 function port() {
   return argv.p || argv.port || 162;

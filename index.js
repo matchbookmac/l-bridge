@@ -1,31 +1,28 @@
 require('./config/logging');
-var
-  snmp               = require('snmpjs'),
-  bunyan             = require('bunyan'),
-  wlog               = require('winston'),
-  fs                 = require('fs'),
-  util               = require('util'),
-  postBridgeMessage  = require('./modules/post-bridge-message'),
-  postToSlack        = require('./modules/post-to-slack'),
-  parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage,
-  handlePostResponse = require('./modules/handle-post-response'),
-  getMsgOID          = require('./modules/parse-bridge-message').getMsgOID,
-  oids               = require('./config/config').oids,
-  port               = require('./config/config').port,
-  ip                 = require('./config/config').ip,
-  currentEnv         = require('./config/config').env,
-  sentinel           = require('./config/config').sentinel,
-  envVars            = require('./config/config').envVars
-;
+var snmp               = require('snmpjs');
+var bunyan             = require('bunyan');
+var wlog               = require('winston');
+var fs                 = require('fs');
+var util               = require('util');
+var postBridgeMessage  = require('./modules/post-bridge-message');
+var postToSlack        = require('./modules/post-to-slack');
+var parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage;
+var handlePostResponse = require('./modules/handle-post-response');
+var getMsgOID          = require('./modules/parse-bridge-message').getMsgOID;
+var oids               = require('./config/config').oids;
+var port               = require('./config/config').port;
+var ip                 = require('./config/config').ip;
+var currentEnv         = require('./config/config').env;
+var sentinel           = require('./config/config').sentinel;
+var envVars            = require('./config/config').envVars;
 
 var
   options = {
     addr: ip,
     port: port,
     family: 'udp4'
-  },
-  log = new bunyan({ name: 'snmpd', level: 'trace'})
-;
+  };
+var log = new bunyan({ name: 'snmpd', level: 'trace'});
 
 var trapd = snmp.createTrapListener({ log: log });
 trapd.bind(options);

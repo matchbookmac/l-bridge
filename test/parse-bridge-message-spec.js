@@ -1,13 +1,11 @@
 require('../config/logging');
-var
-  expect             = require('chai').expect,
-  snmp               = require('snmpjs'),
-  ip                 = require('ip'),
-  sentinel           = require('../modules/mock-sentinel'),
-  getMsgOID          = require('../modules/parse-bridge-message').getMsgOID,
-  findVarbind          = require('../modules/parse-bridge-message').findVarbind,
-  parseBridgeMessage = require('../modules/parse-bridge-message').parseBridgeMessage
-;
+var expect             = require('chai').expect;
+var snmp               = require('snmpjs');
+var ip                 = require('ip');
+var sentinel           = require('../modules/mock-sentinel');
+var getMsgOID          = require('../modules/parse-bridge-message').getMsgOID;
+var findVarbind          = require('../modules/parse-bridge-message').findVarbind;
+var parseBridgeMessage = require('../modules/parse-bridge-message').parseBridgeMessage;
 
 describe('parsing an snmp message', function () {
   var snmpMessage, timeStamp, mockSentinel, client;

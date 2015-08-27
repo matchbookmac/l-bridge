@@ -1,10 +1,9 @@
-var
-  bunyan     = require('bunyan'),
-  snmp       = require('snmpjs'),
-  mibs       = require('../config/mibs'),
-  currentEnv = require('../config/config').env,
-  log
-;
+
+var bunyan     = require('bunyan');
+var snmp       = require('snmpjs');
+var mibs       = require('../config/mibs');
+var currentEnv = require('../config/config').env;
+var log;
 
 if (currentEnv === 'test') {
   log = require('./test-logger');

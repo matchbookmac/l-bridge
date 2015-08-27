@@ -1,10 +1,8 @@
 require('../config/logging');
-var
-  expect            = require('chai').expect,
-  nock              = require('nock'),
-  aBridgeConf       = require('../config/config').aBridge,
-  postBridgeMessage = require('../modules/post-bridge-message')
-;
+var expect            = require('chai').expect;
+var nock              = require('nock');
+var aBridgeConf       = require('../config/config').aBridge;
+var postBridgeMessage = require('../modules/post-bridge-message');
 
 describe('postBridgeMessage', function () {
   it('successfully posts to a-bridge', function (done) {

@@ -1,12 +1,10 @@
 require('../config/logging');
-var
-  expect             = require('chai').expect,
-  nock               = require('nock'),
-  aBridgeConf        = require('../config/config').aBridge,
-  postBridgeMessage  = require('../modules/post-bridge-message'),
-  handlePostResponse = require('../modules/handle-post-response'),
-  sentinel           = require('../modules/mock-sentinel')
-;
+var expect             = require('chai').expect;
+var nock               = require('nock');
+var aBridgeConf        = require('../config/config').aBridge;
+var postBridgeMessage  = require('../modules/post-bridge-message');
+var handlePostResponse = require('../modules/handle-post-response');
+var sentinel           = require('../modules/mock-sentinel');
 
 describe('handlePostResponse', function () {
   var mockSentinel;

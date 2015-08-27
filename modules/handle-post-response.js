@@ -1,16 +1,15 @@
-var
-  http               = require('http'),
-  wlog               = require('winston'),
-  util               = require('util'),
-  retry              = require('retry'),
-  snmp               = require('snmpjs'),
-  postBridgeMessage  = require('./post-bridge-message'),
-  parseBridgeMessage = require('./parse-bridge-message').parseBridgeMessage,
-  aBridge            = require('../config/config').aBridge,
-  bridges            = require('../config/config').bridges,
-  sentinel           = require('../config/config').sentinel,
-  currentEnv         = require('../config/config').env
-;
+
+var http               = require('http');
+var wlog               = require('winston');
+var util               = require('util');
+var retry              = require('retry');
+var snmp               = require('snmpjs');
+var postBridgeMessage  = require('./post-bridge-message');
+var parseBridgeMessage = require('./parse-bridge-message').parseBridgeMessage;
+var aBridge            = require('../config/config').aBridge;
+var bridges            = require('../config/config').bridges;
+var sentinel           = require('../config/config').sentinel;
+var currentEnv         = require('../config/config').env;
 
 function twoHundred(bridgeData, callback){
   callback(null, 200);
