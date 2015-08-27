@@ -72,3 +72,8 @@ Extraneous options with `-` or `--` that are not listed above will be ignored.
   When running on the server, how do we want to do that? daemon? root (ick)?
   Do we want the code on the server to follow master in beanstalk with a webhook?
 -->
+slack endpoint:
+https://hooks.slack.com/services/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
+
+test:
+https://hooks.slack.com/services/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
