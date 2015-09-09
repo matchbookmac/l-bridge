@@ -62,6 +62,10 @@ function fiveHundred(bridgeData, callback){
   exponentialRetry(bridgeData, callback);
 }
 
+function fiveZeroFour(bridgeData, callback){
+  exponentialRetry(bridgeData, callback);
+}
+
 function connectionRefused(bridgeData, callback){
   exponentialRetry(bridgeData, callback);
 }
@@ -122,6 +126,7 @@ var postResponses = {
   "400": fourHundred,
   "404": fourZeroFour,
   "500": fiveHundred,
+  "504": fiveZeroFour,
   "ECONNREFUSED": connectionRefused
 };
 
