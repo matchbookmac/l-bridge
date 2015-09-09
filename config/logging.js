@@ -3,6 +3,9 @@ var fs         = require('fs');
 var path       = require('path');
 var currentEnv = require('./config').env;
 
+fs.mkdir(path.resolve(__dirname, '../logs'), function (err) {
+  return;
+});
 wlog.remove(wlog.transports.Console);
 if (currentEnv !== 'test') {
   wlog.add(wlog.transports.Console, {
