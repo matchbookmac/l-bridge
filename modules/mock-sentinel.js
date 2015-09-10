@@ -1,4 +1,3 @@
-
 var bunyan     = require('bunyan');
 var snmp       = require('snmpjs');
 var mibs       = require('../config/mibs');
