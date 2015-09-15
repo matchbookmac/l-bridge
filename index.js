@@ -61,7 +61,7 @@ function getSNMPCallback(snmpmsg) {
   var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
   postBridgeMessage(bridgeMessage, null, function (err, res, status) {
     handlePostResponse(status, bridgeMessage, function (err, status) {
-      if (err) wlog.error("Error posting\n" + bridgeMessage + ":\n" + err + "\n Status: " + status + "\nAfter Sentinel Restart");
+      if (err) wlog.error("Error posting\n" + bridgeMessage + ":\n" + require('util').inspect(err) + "\n Status: " + status + "\nAfter Sentinel Restart");
     });
   });
 }

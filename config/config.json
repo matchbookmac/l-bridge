@@ -13,8 +13,8 @@
     }
   },
   "aBridge": {
-    "hostname": "52.26.186.75",
-    "port": 80,
+    "hostname": "a-bridge.api.multco.us",
+    "port": 443,
     "path": "/bridges/events/actual",
     "method": "POST",
     "headers": {

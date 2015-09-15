@@ -75,16 +75,18 @@ function exponentialRetry(bridgeData, callback) {
 
   operation.attempt(function () {
     postBridgeMessage(bridgeData, aBridge, function (err, res, status) {
-      if (status === 200) {
-        wlog.info('Retry for:\n' + util.inspect(bridgeData) + '\nsuccessful');
-        return callback(null, status);
-      } else if (postResponses[status.toString()] && status != 500 && status != "ECONNREFUSED") {
-        handlePostResponse(status, bridgeData, callback);
-      } else {
-        if (operation.retry({ err: err, response: res })) {
-          return;
-        }
-        callback(operation.mainError(), status);
+      switch (status) {
+        case 200:
+          wlog.info('Retry for:\n' + util.inspect(bridgeData) + '\nsuccessful');
+          return callback(null, status);
+        case 500: case "ECONNREFUSED": case 504:
+          if (operation.retry({ err: err, response: res })) {
+            return;
+          }
+          callback(operation.mainError(), status);
+          break;
+        default:
+          handlePostResponse(status, bridgeData, callback);
       }
     });
   });
@@ -130,4 +132,4 @@ var postResponses = {
   "ECONNREFUSED": connectionRefused
 };
 
-module .exports = handlePostResponse;
+module.exports = handlePostResponse;
