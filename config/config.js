@@ -5,7 +5,7 @@ var ip   = require('ip');
 var argv = require('minimist')(process.argv.slice(2));
 
 function port() {
-  return argv.p || argv.port || process.env.NODE_ENV || 2000;
+  return argv.p || argv.port || process.env.PORT || 2000;
 }
 
 function ipAddress() {
