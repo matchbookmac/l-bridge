@@ -14,7 +14,7 @@ function ipAddress() {
 
 function environment() {
   var
-    argvEnv = argv.E || argv.env,
+    argvEnv = argv.E || argv.env || process.env.NODE_ENV,
     node_env
   ;
   if (argvEnv === 'production' || argvEnv === 'prod') {
