@@ -16,12 +16,11 @@ var currentEnv         = require('./config/config').env;
 var sentinel           = require('./config/config').sentinel;
 var envVars            = require('./config/config').envVars;
 
-var
-  options = {
-    addr: ip,
-    port: port,
-    family: 'udp4'
-  };
+var options = {
+  addr: ip,
+  port: port,
+  family: 'udp4'
+};
 var log = new bunyan({ name: 'snmpd', level: 'trace'});
 
 var trapd = snmp.createTrapListener({ log: log });

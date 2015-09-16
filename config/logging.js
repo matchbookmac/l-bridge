@@ -33,7 +33,7 @@ if (currentEnv !== 'test') {
   // I have no idea why the tests fail when the test-log starts with content
   // in it, but the next line clears the file before initiating the log,
   // after which the tests pass.
-  fs.truncateSync(path.resolve('logs/test-log.log'), 0);
+  fs.closeSync(fs.openSync(path.resolve('logs/test-log.log'), 'w'));
   wlog.add(wlog.transports.File, {
     name: 'test-file',
     colorize: true,
