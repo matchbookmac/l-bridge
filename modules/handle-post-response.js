@@ -58,18 +58,6 @@ function fourZeroFour(bridgeData, callback){
   });
 }
 
-function fiveHundred(bridgeData, callback){
-  exponentialRetry(bridgeData, callback);
-}
-
-function fiveZeroFour(bridgeData, callback){
-  exponentialRetry(bridgeData, callback);
-}
-
-function connectionRefused(bridgeData, callback){
-  exponentialRetry(bridgeData, callback);
-}
-
 function exponentialRetry(bridgeData, callback) {
   var operation = retry.operation({ retries: 4 });
 
@@ -79,7 +67,7 @@ function exponentialRetry(bridgeData, callback) {
         case 200:
           wlog.info('Retry for:\n' + util.inspect(bridgeData) + '\nsuccessful');
           return callback(null, status);
-        case 500: case "ECONNREFUSED": case 504:
+        case 500: case 503: case 504: case "ECONNREFUSED":
           if (operation.retry({ err: err, response: res })) {
             return;
           }
@@ -127,9 +115,10 @@ var postResponses = {
   "200": twoHundred,
   "400": fourHundred,
   "404": fourZeroFour,
-  "500": fiveHundred,
-  "504": fiveZeroFour,
-  "ECONNREFUSED": connectionRefused
+  "500": exponentialRetry,
+  "503": exponentialRetry,
+  "504": exponentialRetry,
+  "ECONNREFUSED": exponentialRetry
 };
 
 module.exports = handlePostResponse;
