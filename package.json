@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "sudo mocha --reporter nyan",
-    "start": "sudo nodemon index.js -E development",
-    "prod-start": "sudo forever start index.js -E production",
-    "stop": "sudo forever stop index.js"
+    "test": "NODE_ENV=test sudo mocha --reporter nyan -c",
+    "start": "sudo nodemon index.js -E development -p 162",
+    "prod-start": "sudo start l-bridge",
+    "stop": "sudo stop l-bridge"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   "license": "ISC",
   "dependencies": {
     "bunyan": "^1.4.0",
+    "chalk": "^1.1.1",
     "fs": "0.0.2",
     "ip": "^0.3.3",
     "lodash": "^3.10.1",
@@ -27,6 +28,9 @@
     "request": "^2.61.0",
     "retry": "^0.6.1",
     "snmpjs": "file:./node-snmpjs",
+    "strftime": "^0.9.2",
+    "trace": "^1.2.0",
+    "tracer": "^0.8.0",
     "util": "^0.10.3",
     "winston": "1.0.1"
   },

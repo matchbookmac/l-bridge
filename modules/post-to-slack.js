@@ -1,6 +1,7 @@
-var request = require('request');
+var request    = require('request');
 var currentEnv = require('../config/config').env;
-var slack = require('../config/config.json').slack;
+var slack      = require('../config/config.json').slack;
+var logger     = require('../config/logging');
 
 module.exports = function (bridgeData) {
   if (currentEnv !== 'test') {
@@ -17,8 +18,8 @@ module.exports = function (bridgeData) {
         payload: JSON.stringify(slackMsg)
       }
     }, function (err, response) {
-        if (err) return wlog.error(err);
-        if (response.body !== 'ok') return wlog.error(response.body);
+        if (err) return logger.error(err);
+        if (response.body !== 'ok') return logger.error(response.body);
     });
   }
 };

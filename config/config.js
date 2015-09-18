@@ -1,6 +1,4 @@
-
 var env  = require('./config.json');
-var wlog = require('winston');
 var ip   = require('ip');
 var argv = require('minimist')(process.argv.slice(2));
 
@@ -55,7 +53,7 @@ function bridges() {
 
 function aBridge() {
   var tmpABridge = env.aBridge;
-  if (environment() === 'test') tmpABridge.hostname = ip.address();
+  // if (environment() === 'test') tmpABridge.hostname = ip.address();
   return tmpABridge;
 }
 

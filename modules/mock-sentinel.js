@@ -2,10 +2,10 @@ var bunyan     = require('bunyan');
 var snmp       = require('snmpjs');
 var mibs       = require('../config/mibs');
 var currentEnv = require('../config/config').env;
+var logger     = require('../config/logging');
 var log;
-
 if (currentEnv === 'test') {
-  log = require('./test-logger');
+  log = logger;
 } else {
   log = new bunyan({ name: 'snmpd', level: 'trace'});
 }
@@ -14,16 +14,14 @@ function Sentinel() {}
 
 Sentinel.prototype.sendTrap = function sendTrap(options){
   var ip = require('ip');
-  var
-    client    = snmp.createClient({ log: log }),
-    ipAddr    = options.ip || ip.address(),
+  var client    = snmp.createClient({ log: log });
+  var ipAddr    = options.ip || ip.address();
     // '172.20.198.7', l-bridge
-    community = options.community || 'public',
-    oid       = options.oid || '1.3.6.1.4.1.20839.1.2.1.1.1.2.6',  // Bailey's Bridge :P
+  var community = options.community || 'public';
+  var oid       = options.oid || '1.3.6.1.4.1.20839.1.2.1.1.1.2.6';  // Bailey's Bridge :P
     // "1.3.6.1.2.1.1.1.0", Sentinel restart
-    status    = options.status || 0,
-    callback  = function () {}
-  ;
+  var status    = options.status || 0;
+  var callback  = function () {};
 
   var varbinds  = [
     snmp.varbind.createVarbind({

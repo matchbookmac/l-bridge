@@ -1,7 +1,8 @@
 var https      = require('https');
-var wlog       = require('winston');
+var logger     = require('../config/logging');
 var aBridge    = require('../config/config').aBridge;
 var currentEnv = require('../config/config').env;
+var _          = require("lodash");
 
 module .exports = function(bridgeData, options, callback){
   var logString;
@@ -27,14 +28,14 @@ module .exports = function(bridgeData, options, callback){
     });
 
     res.on('end', function () {
-      wlog.info("[%s] outgoing post %s - %s",
-        require("lodash").keys(res.req.agent.sockets)[0].split(":")[0],
+      logger.info("[%s] outgoing post %s - %s",
+        (res.req.agent ? _.keys(res.req.agent.sockets)[0].split(":")[0] : 'N/A'),
         req.path,
         status
       );
       if (callback) return callback(null, response, status);
-      wlog.info("Request Status: " + status, response);
-      if (logString) wlog.info(logString);
+      logger.info("Request Status: " + status, response);
+      if (logString) logger.info(logString);
     });
   });
 

@@ -13,7 +13,7 @@ describe('handlePostResponse', function () {
     done();
   });
 
-  var aBridge = nock('http://' + aBridgeConf.hostname + ':' + aBridgeConf.port);
+  var aBridge = nock('https://' + aBridgeConf.hostname + ':' + aBridgeConf.port);
   var timeStamp = (new Date()).toString();
   var bridgeMessage = {
     bridge:"bailey's bridge",
@@ -29,25 +29,14 @@ describe('handlePostResponse', function () {
     bridge:"bailey's bridge",
     status:true,
   };
-
-  // Unfortunately, the .times(4) is essential to mock aBridge behavior
-  // For a http 500 error. See the 500 error tests for more.
-  // HTTP 200 Success
-  aBridge.post(aBridgeConf.path, bridgeMessage)
-          .times(4)
-          .reply(200, "post success");
-  // HTTP 400 Errors
-  aBridge.post(aBridgeConf.path, alteredMessage)
-          .reply(400, "post fail bad message");
-  aBridge.post(aBridgeConf.path, incompleteMessage)
-          .reply(400, "post fail not enough message");
-  // HTTP 404 Error
-  aBridge.post('/incoming', bridgeMessage)
-          .reply(404, "wrong place, brah");
-
+  function isCorrectBody (body) {
+    return body.bridge === bridgeMessage.bridge && body.status && body.timeStamp && (typeof new Date(body.timeStamp) === typeof new Date());
+  }
   // HTTP 200 Test
   it('successfully posts to a-bridge', function (done) {
-    var postStatus;
+    this.timeout(5000);
+    aBridge.post(aBridgeConf.path, bridgeMessage)
+            .reply(200, "post success");
     postBridgeMessage(bridgeMessage, null, function(err, res, status){
       handlePostResponse(status, bridgeMessage, function (err, status) {
         expect(status).to.equal(200);
@@ -57,6 +46,11 @@ describe('handlePostResponse', function () {
   });
   // HTTP 400 Test
   it('errors if the message is not valid', function (done) {
+    this.timeout(5000);
+    aBridge.post(aBridgeConf.path, alteredMessage)
+            .reply(400, "post fail bad message");
+    aBridge.post(aBridgeConf.path, isCorrectBody)
+            .reply(200, "post success");
     postBridgeMessage(alteredMessage, null, function(err, res, status){
       expect(status).to.equal(400);
       handlePostResponse(status, bridgeMessage, function (err, status) {
@@ -67,6 +61,11 @@ describe('handlePostResponse', function () {
   });
   // HTTP 400 Test
   it('errors if the message is incomplete', function (done) {
+    this.timeout(5000);
+    aBridge.post(aBridgeConf.path, isCorrectBody)
+            .reply(200, "post success");
+    aBridge.post(aBridgeConf.path, incompleteMessage)
+            .reply(400, "post fail not enough message");
     postBridgeMessage(incompleteMessage, null, function(err, res, status){
       expect(status).to.equal(400);
       handlePostResponse(status, bridgeMessage, function (err, status) {
@@ -77,6 +76,11 @@ describe('handlePostResponse', function () {
   });
   // HTTP 404 Test
   it('errors if the path is incorrect', function (done) {
+    this.timeout(5000);
+    aBridge.post(aBridgeConf.path, isCorrectBody)
+            .reply(200, "post success");
+    aBridge.post('/incoming', bridgeMessage)
+            .reply(404, "wrong place, brah");
     postBridgeMessage(bridgeMessage, { path: "/incoming" }, function(err, res, status){
       expect(status).to.equal(404);
       handlePostResponse(status, bridgeMessage, function (err, status) {
@@ -87,9 +91,10 @@ describe('handlePostResponse', function () {
   });
   // HTTP 500 Tests
   it('retries once and succeeds if aBridge is having a problem', function (done) {
+    this.timeout(5000);
     aBridge.post("/500-error", bridgeMessage)
             .reply(500, "my bad");
-    aBridge.post(aBridgeConf.path, bridgeMessage)
+    aBridge.post(aBridgeConf.path, isCorrectBody)
             .reply(200, "post success");
     postBridgeMessage(bridgeMessage, { path: "/500-error"}, function(err, res, status){
       expect(status).to.equal(500);
@@ -100,11 +105,12 @@ describe('handlePostResponse', function () {
     });
   });
   it('retries once, receives a different http error, then succeeds if aBridge is having a problem', function (done) {
+    this.timeout(5000);
     aBridge.post("/500-error", bridgeMessage)
             .reply(500, "my bad");
     aBridge.post(aBridgeConf.path, bridgeMessage)
             .reply(400, "post fail");
-    aBridge.post(aBridgeConf.path, bridgeMessage)
+    aBridge.post(aBridgeConf.path, isCorrectBody)
             .reply(200, "post success");
     postBridgeMessage(bridgeMessage, { path: "/500-error"}, function(err, res, status){
       expect(status).to.equal(500);
@@ -119,7 +125,7 @@ describe('handlePostResponse', function () {
     aBridge.post(aBridgeConf.path, bridgeMessage)
             .times(3)
             .reply(500, "my bad");
-    aBridge.post(aBridgeConf.path, bridgeMessage)
+    aBridge.post(aBridgeConf.path, isCorrectBody)
             .reply(200, "post success");
     postBridgeMessage(bridgeMessage, null, function(err, res, status){
       expect(status).to.equal(500);
@@ -154,7 +160,7 @@ describe('handlePostResponse', function () {
     aBridge.post(aBridgeConf.path, bridgeMessage)
             .times(3)
             .replyWithError(connectionError);
-    aBridge.post(aBridgeConf.path, bridgeMessage)
+    aBridge.post(aBridgeConf.path, isCorrectBody)
             .reply(200, "post success");
     postBridgeMessage(bridgeMessage, null, function(err, res, status){
       expect(status).to.equal('ECONNREFUSED');

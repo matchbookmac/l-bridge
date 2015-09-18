@@ -1,55 +1,47 @@
 require('./config/logging');
 var snmp               = require('snmpjs');
 var bunyan             = require('bunyan');
-var wlog               = require('winston');
+var logger             = require('./config/logging');
 var fs                 = require('fs');
 var util               = require('util');
 var postBridgeMessage  = require('./modules/post-bridge-message');
-var postToSlack        = require('./modules/post-to-slack');
 var parseBridgeMessage = require('./modules/parse-bridge-message').parseBridgeMessage;
 var handlePostResponse = require('./modules/handle-post-response');
 var getMsgOID          = require('./modules/parse-bridge-message').getMsgOID;
-var oids               = require('./config/config').oids;
-var port               = require('./config/config').port;
-var ip                 = require('./config/config').ip;
-var currentEnv         = require('./config/config').env;
-var sentinel           = require('./config/config').sentinel;
-var envVars            = require('./config/config').envVars;
+var serverConfig       = require('./config/config');
 
 var options = {
-  addr: ip,
-  port: port,
+  addr: serverConfig.ip,
+  port: serverConfig.port,
   family: 'udp4'
 };
+// var log = logger;
 var log = new bunyan({ name: 'snmpd', level: 'trace'});
 
 var trapd = snmp.createTrapListener({ log: log });
 trapd.bind(options);
-wlog.info(new Date().toString() + ':  Starting up SNMP Listner \n');
+logger.info(new Date().toString() + ':  Starting up SNMP Listner');
 
 trapd.on('trap',function(msg) {
-  var
-    msgOID    = getMsgOID(msg),
-    timeStamp = (new Date()).toString()
-  ;
-  if (msgOID && (oids.sentinel[msgOID] != "Sentinel 16 is up")) {
+  var msgOID    = getMsgOID(msg);
+  var timeStamp = (new Date()).toString();
+
+  if (msgOID && (serverConfig.oids.sentinel[msgOID] != "Sentinel 16 is up")) {
     var bridgeMessage = parseBridgeMessage(msg, timeStamp);
     postBridgeMessage(bridgeMessage, null, function (err, res, status) {
       handlePostResponse(status, bridgeMessage, function (err, status) {
-        if (err) wlog.error("Error posting\n" + util.inspect(bridgeMessage) + ":\n" + err + "\n Status: " + status);
+        if (err) logger.error("Error posting\n" + util.inspect(bridgeMessage) + ":\n" + err + "\n Status: " + status);
       });
     });
-    postToSlack(bridgeMessage);
+    require('./modules/post-to-slack')(bridgeMessage);
   } else {
-    wlog.warn("Sentinel restart");
-    var
-      client = snmp.createClient({ log: log }),
-      agentAddress = msg.src.address
-    ;
+    logger.warn("Sentinel restart");
+    var client = snmp.createClient({ log: log });
+    var agentAddress = msg.src.address;
 
-    for (var oid in oids.bridges) {
-      if (oids.bridges.hasOwnProperty(oid)) {
-        client.get(agentAddress, sentinel.community, 0, oid, getSNMPCallback);
+    for (var oid in serverConfig.oids.bridges) {
+      if (serverConfig.oids.bridges.hasOwnProperty(oid)) {
+        client.get(agentAddress, serverConfig.sentinel.community, 0, oid, getSNMPCallback);
       }
     }
   }
@@ -60,7 +52,7 @@ function getSNMPCallback(snmpmsg) {
   var bridgeMessage = parseBridgeMessage(snmpmsg, timeStamp);
   postBridgeMessage(bridgeMessage, null, function (err, res, status) {
     handlePostResponse(status, bridgeMessage, function (err, status) {
-      if (err) wlog.error("Error posting\n" + bridgeMessage + ":\n" + require('util').inspect(err) + "\n Status: " + status + "\nAfter Sentinel Restart");
+      if (err) logger.error("Error posting\n" + bridgeMessage + ":\n" + util.inspect(err) + "\n Status: " + status + "\nAfter Sentinel Restart");
     });
   });
 }

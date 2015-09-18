@@ -57,9 +57,7 @@ node modules/send-test-trap.js -s 0
 -i | --ip        : IP Address for where l-bridge instance is located. Default is
                    the IP address for the current machine.
 -c | --community : Community option for SNMP trap. Default is `public`.
--o | --oid       : OID of the trap being sent. Default is
-                   `1.3.6.1.4.1.20839.1.2.1.1.1.2.6`, which corresponds to
-                   `bailey's bridge` on l-bridge.
+-b | --bridge    : name of the bridge you are simulating.
 -s | --status    : Specify up or down. 1: bridge is raising, 0: bridge is
                    lowering. Default is 0.
 

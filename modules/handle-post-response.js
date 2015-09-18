@@ -1,6 +1,5 @@
-
 var http               = require('http');
-var wlog               = require('winston');
+var logger             = require('../config/logging');
 var util               = require('util');
 var retry              = require('retry');
 var snmp               = require('snmpjs');
@@ -17,18 +16,16 @@ function twoHundred(bridgeData, callback){
 
 function fourHundred(bridgeData, callback){
   if (typeof bridgeData.bridge === 'undefined') {
-    wlog.error('400 error, bridge name not set for' + bridgeData);
+    logger.error('400 error, bridge name not set for' + bridgeData);
   }
   if (typeof bridgeData.status === 'undefined') {
-    wlog.error('400 error, bridge status not set for' + bridgeData);
+    logger.error('400 error, bridge status not set for' + bridgeData);
   }
   if (typeof bridgeData.timeStamp === 'undefined') {
-    wlog.error('400 error, bridge timestamp not set for' + bridgeData);
+    logger.error('400 error, bridge timestamp not set for' + bridgeData);
   }
-  var
-    client = snmp.createClient(),
-    snmpResponse
-  ;
+  var client = snmp.createClient();
+  var snmpResponse;
 
   if (bridgeData.bridge) {
     client.get(sentinel.ip, sentinel.community, 0, bridges[bridgeData.bridge], function (snmpmsg) {
@@ -65,7 +62,7 @@ function exponentialRetry(bridgeData, callback) {
     postBridgeMessage(bridgeData, aBridge, function (err, res, status) {
       switch (status) {
         case 200:
-          wlog.info('Retry for:\n' + util.inspect(bridgeData) + '\nsuccessful');
+          logger.info('Retry for:\n' + util.inspect(bridgeData) + '\nsuccessful');
           return callback(null, status);
         case 500: case 503: case 504: case "ECONNREFUSED":
           if (operation.retry({ err: err, response: res })) {
@@ -93,10 +90,10 @@ function getSNMPCallback(snmpmsg, callback) {
 
 function postRequestRetryCallback(err, res, status, message, callback) {
   if (status === 200) {
-    wlog.info('Retry for:\n' + util.inspect(message) + '\nsuccessful');
+    logger.info('Retry for:\n' + util.inspect(message) + '\nsuccessful');
     return callback(null, status);
   } else if (postResponses[status.toString()]) {
-    wlog.error('Retry for:\n' + util.inspect(message) + '\nunsucessful with HTTP error: ' + status);
+    logger.error('Retry for:\n' + util.inspect(message) + '\nunsucessful with HTTP error: ' + status);
     return callback(err, status);
   }
 }
@@ -107,7 +104,7 @@ function handlePostResponse(status, bridgeMessage, callback) {
   if (postResponses[postStatus]) {
     postResponses[postStatus].call(that, bridgeMessage, callback);
   } else {
-    wlog.error('Unknown Response Status: ' + status + ', Unsure how to handle');
+    logger.error('Unknown Response Status: ' + status + ', Unsure how to handle');
   }
 }
 
