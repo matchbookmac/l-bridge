@@ -7,7 +7,8 @@
     "test": "NODE_ENV=test sudo mocha --reporter nyan -c",
     "start": "sudo nodemon index.js -E development -p 162",
     "prod-start": "sudo start l-bridge",
-    "stop": "sudo stop l-bridge"
+    "stop": "",
+    "restart": "sudo stop l-bridge && sudo start l-bridge"
   },
   "repository": {
     "type": "git",
