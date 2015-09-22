@@ -1,16 +1,7 @@
-var env  = require('./config.json');
 var ip   = require('ip');
 var argv = require('minimist')(process.argv.slice(2));
 
-function port() {
-  return argv.p || argv.port || parseInt(process.env.PORT) || 2000;
-}
-
-function ipAddress() {
-  return ip.address();
-}
-
-function environment() {
+var currentEnv = (function environment() {
   var
     argvEnv = argv.E || argv.env || process.env.NODE_ENV,
     node_env
@@ -23,19 +14,20 @@ function environment() {
     node_env = process.env.NODE_ENV = 'test';
   }
   return node_env;
+})();
+
+var envVars = require('./config.json')[currentEnv];
+
+function port() {
+  return argv.p || argv.port || parseInt(process.env.PORT) || 2000;
 }
 
-function envVars() {
-  if (process.env.NODE_ENV) {
-    return env[process.env.NODE_ENV];
-  } else {
-    var node_env = environment();
-    return env[node_env];
-  }
+function ipAddress() {
+  return ip.address();
 }
 
 function oids() {
-  return env.oids;
+  return envVars.oids;
 }
 
 function bridges() {
@@ -52,27 +44,26 @@ function bridges() {
 }
 
 function aBridge() {
-  var tmpABridge = env.aBridge;
-  // if (environment() === 'test') tmpABridge.hostname = ip.address();
-  return tmpABridge;
+  return envVars.aBridge;
+}
+
+function slack() {
+  return envVars.slack;
 }
 
 function sentinel() {
-  var tmpSentinel = env.sentinel;
-  if (environment() === 'test') {
-    tmpSentinel.ip = ip.address();
-    tmpSentinel.community = "public";
-  }
+  var tmpSentinel = envVars.sentinel;
   return tmpSentinel;
 }
 
 module .exports = {
   port:     port(),
   ip:       ipAddress(),
-  env:      environment(),
-  envVars:  envVars(),
+  env:      currentEnv,
+  envVars:  envVars,
   oids:     oids(),
   bridges:  bridges(),
   aBridge:  aBridge(),
+  slack:    slack(),
   sentinel: sentinel()
 };

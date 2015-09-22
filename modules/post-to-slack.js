@@ -1,6 +1,6 @@
 var request    = require('request');
 var currentEnv = require('../config/config').env;
-var slack      = require('../config/config.json').slack;
+var slack      = require('../config/config').slack;
 var logger     = require('../config/logging');
 var _          = require('lodash');
 
