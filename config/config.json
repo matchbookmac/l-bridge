@@ -30,7 +30,7 @@
     },
     "slack": {
       "url": "https://hooks.slack.com/services/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",
-      "channel": "#bridgeapp",
+      "channel": "#bridge-test",
       "username": "l-bridge",
       "icon_emoji": ":rotating_light:"
     }
@@ -102,7 +102,7 @@
     },
     "slack": {
       "url": "https://hooks.slack.com/services/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",
-      "channel": "#bridgeapp",
+      "channel": "#bridge-test",
       "username": "l-bridge",
       "icon_emoji": ":rotating_light:"
     }
